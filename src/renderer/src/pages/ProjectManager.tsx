@@ -65,9 +65,23 @@ export function ProjectManager() {
     setShowWizard(true)
   }
 
-  const handleWizardComplete = () => {
+  const handleWizardComplete = (result: any) => {
     setShowWizard(false)
     setWizardData(null)
+    // Register project in store
+    addProject({
+      id: `p_${Date.now()}`,
+      name: result.projectName,
+      type: wizardData?.type || 'mr',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      settings: {
+        resolution: result.resolution,
+        fps: result.fps,
+        backgroundColor: '#141414',
+        description: '',
+      }
+    } as any)
     navigate('/project/new')
   }
 
