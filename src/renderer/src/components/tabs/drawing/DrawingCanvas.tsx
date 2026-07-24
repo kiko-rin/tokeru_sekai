@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { PointerHandler } from '../../../lib/input/PointerHandler'
 import { BrushEngine } from '../../../lib/drawing/BrushEngine'
 import { CanvasEngine } from '../../../lib/drawing/CanvasEngine'
@@ -13,61 +13,75 @@ interface DrawingCanvasProps {
 export function DrawingCanvas({ brushSize, brushOpacity, activeTool, onStatusChange }: DrawingCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const brushRef = useRef<BrushEngine | null>(null)
-  const pointerRef = useRef<PointerHandler | null>(null)
-  const canvasEngineRef = useRef<CanvasEngine | null>(null)
+  const handlerRef = useRef<PointerHandler | null>(null)
+  const engineRef = useRef<CanvasEngine | null>(null)
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null)
+  const drawingRef = useRef(false)
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(100)
-  const [isDrawing, setIsDrawing] = useState(false)
-  const colorRef = useRef('#ffffff')
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
     brushRef.current = new BrushEngine(960, 540)
-    canvasEngineRef.current = new CanvasEngine(canvas)
+    engineRef.current = new CanvasEngine(canvas)
 
     const handler = new PointerHandler(canvas, {
       onDown: (state) => {
-        setIsDrawing(true)
+        drawingRef.current = true
         const brush = brushRef.current!
-        const engine = canvasEngineRef.current!
-        const { x, y } = engine.screenToCanvas(state.x, state.y)
-        brush.stamp(x, y, state.pressure, state.tiltX, state.tiltY, {
+        const engine = engineRef.current!
+        const pt = engine.screenToCanvas(state.x, state.y)
+        lastPointRef.current = pt
+        const color = activeTool === '橡皮擦' ? '#1a1a1a' : '#ffffff'
+        brush.stamp(pt.x, pt.y, state.pressure, state.tiltX, state.tiltY, {
           size: brushSize, opacity: brushOpacity / 100, flow: 1, hardness: 0.8,
           spacing: 25, scatterX: 0, scatterY: 0, angle: 0, roundness: 1,
           pressureSize: true, pressureOpacity: false, tiltSize: false, tiltOpacity: false
-        }, activeTool === '橡皮擦' ? '#1a1a1a' : '#ffffff')
+        }, color)
         const bitmap = brush.getCanvas().transferToImageBitmap()
         engine.render(bitmap)
       },
       onMove: (state) => {
-        if (!isDrawing) return
+        setCursorPos({ x: state.x, y: state.y })
+        if (!drawingRef.current) return
         const brush = brushRef.current!
-        const engine = canvasEngineRef.current!
-        const { x, y } = engine.screenToCanvas(state.x, state.y)
-        brushRef.current?.line(
-          state.x, state.y, x, y,
-          state.pressure, state.tiltX, state.tiltY,
-          { size: brushSize, opacity: brushOpacity / 100, flow: 1, hardness: 0.8,
+        const engine = engineRef.current!
+        const pt = engine.screenToCanvas(state.x, state.y)
+        const prev = lastPointRef.current
+        if (prev) {
+          const color = activeTool === '橡皮擦' ? '#1a1a1a' : '#ffffff'
+          brush.line(prev.x, prev.y, pt.x, pt.y, state.pressure, state.tiltX, state.tiltY, {
+            size: brushSize, opacity: brushOpacity / 100, flow: 1, hardness: 0.8,
             spacing: 25, scatterX: 0, scatterY: 0, angle: 0, roundness: 1,
-            pressureSize: true, pressureOpacity: false, tiltSize: false, tiltOpacity: false },
-          activeTool === '橡皮擦' ? '#1a1a1a' : '#ffffff'
-        )
+            pressureSize: true, pressureOpacity: false, tiltSize: false, tiltOpacity: false
+          }, color)
+          const bitmap = brush.getCanvas().transferToImageBitmap()
+          engine.render(bitmap)
+        }
+        lastPointRef.current = pt
       },
-      onUp: () => setIsDrawing(false),
-      onLeave: () => setIsDrawing(false)
+      onUp: () => {
+        drawingRef.current = false
+        lastPointRef.current = null
+      },
+      onLeave: () => {
+        drawingRef.current = false
+        lastPointRef.current = null
+      }
     })
-    pointerRef.current = handler
+    handlerRef.current = handler
 
     return () => {
       handler.destroy()
-      canvasEngineRef.current?.destroy()
+      engineRef.current?.destroy()
     }
   }, [])
 
   useEffect(() => {
-    onStatusChange?.({ tool: activeTool, zoom, x: 0, y: 0 })
-  }, [activeTool, zoom, onStatusChange])
+    onStatusChange?.({ tool: activeTool, zoom, x: cursorPos.x, y: cursorPos.y })
+  }, [activeTool, zoom, cursorPos, onStatusChange])
 
   return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--ho-bg-primary)', position: 'relative' }}>

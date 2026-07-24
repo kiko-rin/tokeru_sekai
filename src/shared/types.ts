@@ -166,6 +166,8 @@ export interface Clip {
   name: string
   filePath: string
   duration: number
+  start: number
+  trackId: string
   width: number
   height: number
   fps: number
