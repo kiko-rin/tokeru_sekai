@@ -261,7 +261,7 @@ export function EditorPanel() {
               <input type="range" min={0} max={100} defaultValue={80} style={{ width:40, height:3, accentColor:'var(--ho-accent)', marginBottom:8 }} />
             </div>
             <div style={{ width:65, display:'flex', flexDirection:'column', alignItems:'center' }}>
-              <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'space-between', padding:'8px 0' }}>
+              <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'space-evenly', padding:'8px 0' }}>
                 {['0','-6','-12','-18','-24','-30','-inf'].map(l => (
                   <span key={l} style={{ fontSize:7, color:'var(--ho-text-tertiary)', textAlign:'center' }}>{l}</span>
                 ))}

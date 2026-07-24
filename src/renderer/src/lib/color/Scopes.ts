@@ -63,12 +63,12 @@ export class Vectorscope {
     ctx.stroke()
 
     const labels = [
-      { name: 'R', angle: -Math.PI / 6 },
-      { name: 'MG', angle: -Math.PI / 3 },
-      { name: 'G', angle: -Math.PI * 5 / 6 },
-      { name: 'CY', angle: Math.PI * 5 / 6 },
-      { name: 'B', angle: Math.PI / 3 },
-      { name: 'Y', angle: Math.PI / 6 }
+      { name: 'R', angle: 0 },
+      { name: 'MG', angle: Math.PI / 6 },
+      { name: 'B', angle: Math.PI * 2 / 6 },
+      { name: 'CY', angle: Math.PI * 4 / 6 },
+      { name: 'G', angle: Math.PI * 5 / 6 },
+      { name: 'Y', angle: Math.PI * 7 / 6 }
     ]
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'

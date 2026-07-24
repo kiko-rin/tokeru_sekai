@@ -22,6 +22,7 @@ export function TabBar({ activeTab, onTabChange }: TabBarProps) {
   const isDragging = useRef(false)
 
   const handleDragStart = useCallback((e: React.MouseEvent) => {
+    if (e.button !== 0) return
     isDragging.current = true
     setDragY(e.clientY)
   }, [])
