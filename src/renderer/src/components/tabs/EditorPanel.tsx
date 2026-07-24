@@ -3,6 +3,7 @@ import { Input } from '../ui/Input'
 import { Icon } from '../ui/Icon'
 import { useTimelineStore } from '../../stores/timelineStore'
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts'
+import { useDITImport } from '../../hooks/useDITImport'
 
 const TC: Record<string,string> = { V1:'var(--ho-track-v1)', V2:'var(--ho-track-v2)', V3:'var(--ho-track-v3)', A1:'var(--ho-track-a1)', A2:'var(--ho-track-a2)' }
 const TK = ['V1','V2','V3','A1','A2']
@@ -30,6 +31,7 @@ export function EditorPanel() {
   const totalDuration = useMemo(() => computeTotalDuration(tracks), [tracks])
   const [inPoint, setInPoint] = useState(0)
   const [outPoint, setOutPoint] = useState(totalDuration)
+  const { importMedia, ImportDialog } = useDITImport()
 
   // Keep outPoint in sync with totalDuration
   useEffect(() => { setOutPoint(totalDuration) }, [totalDuration])
@@ -119,6 +121,9 @@ export function EditorPanel() {
             ))}
           </div>
           <div style={{ padding:6 }}><Input placeholder="搜索..." value={mediaSearch} onChange={e=>setMediaSearch(e.target.value)} style={{ fontSize:11, height:28 }} /></div>
+          <div style={{ padding:'0 6px 4px' }}>
+            <span style={{ fontSize:10, cursor:'pointer', color:'var(--ho-accent)' }} onClick={async () => { const files = await importMedia(); if (files.length > 0) console.log('DIT imported:', files.length) }}>+ DIT 导入</span>
+          </div>
           <div style={{ display:'flex', gap:4, padding:'4px 6px', flexShrink:0 }}>
             {['全部','视频','图片','音频'].map(f => (
               <button key={f} onClick={()=>setMediaFilter(f)} style={{ padding:'2px 10px', borderRadius:10, fontSize:10, cursor:'pointer', backgroundColor:mediaFilter===f?'var(--ho-accent-bg)':'rgba(255,255,255,0.04)', color:mediaFilter===f?'var(--ho-accent)':'var(--ho-text-secondary)', height:20, border:'none' }}>{f}</button>
@@ -312,6 +317,7 @@ export function EditorPanel() {
           </div>
         </div>
       </div>
+      {ImportDialog}
     </div>
   )
 }

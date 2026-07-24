@@ -4,6 +4,7 @@ import { Input } from '../ui/Input'
 import { Slider } from '../ui/Slider'
 import { Icon } from '../ui/Icon'
 import { useDragDrop } from '../../hooks/useDragDrop'
+import { useDITImport } from '../../hooks/useDITImport'
 
 interface StoryboardItem {
   id: number
@@ -44,6 +45,7 @@ export function QuickEditPanel() {
   ])
 
   const { onDragStart, onDrop, onDragOver } = useDragDrop()
+  const { importMedia, ImportDialog } = useDITImport()
 
   const nextId = useMemo(() => Math.max(0, ...storyboardItems.map(i => i.id)) + 1, [storyboardItems])
 
@@ -185,6 +187,7 @@ export function QuickEditPanel() {
           </div>
         </div>
       </div>
+      {ImportDialog}
     </div>
   )
 }

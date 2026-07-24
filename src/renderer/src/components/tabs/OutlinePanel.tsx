@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { Icon } from '../ui/Icon'
+import { useDITImport } from '../../hooks/useDITImport'
 
 interface Shot {
   id: string; name: string; script: string; paragraphType: string
@@ -40,6 +41,7 @@ export function OutlinePanel() {
   const [materialTab, setMaterialTab] = useState('视频')
   const [materialSearch, setMaterialSearch] = useState('')
   const editorRef = useRef<HTMLDivElement>(null)
+  const { importMedia, ImportDialog } = useDITImport()
 
   const currentShot = scenes.flatMap(s => s.shots).find(sh => sh.id === selectedShot)
   const sceneIdx = scenes.findIndex(s => s.shots.some(sh => sh.id === selectedShot))
@@ -96,12 +98,8 @@ export function OutlinePanel() {
   }, [])
 
   const importMaterial = async () => {
-    const api = (window as any).electronAPI
-    if (!api) return
-    const files = await api.dialog.openFile({
-      title: '导入素材', filters: [{ name:'媒体文件', extensions:['mp4','mov','avi','png','jpg','mp3','wav'] }]
-    })
-    if (files) console.log('imported:', files)
+    const files = await importMedia()
+    if (files.length > 0) console.log('DIT imported:', files.length)
   }
 
   return (
@@ -212,6 +210,7 @@ export function OutlinePanel() {
           <Button variant="default" style={{ width: '100%' }} onClick={importMaterial}><Icon name="plus" size={12} /> 导入素材</Button>
         </div>
       </div>
+      {ImportDialog}
     </div>
   )
 }
