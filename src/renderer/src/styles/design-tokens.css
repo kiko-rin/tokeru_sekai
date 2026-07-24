@@ -1,0 +1,51 @@
+:root {
+  --ho-bg-primary: #141414;
+  --ho-bg-secondary: #1c1c1c;
+  --ho-bg-tertiary: #242424;
+  --ho-bg-elevated: #2a2a2a;
+  --ho-surface: #202020;
+
+  --ho-border: rgba(255, 255, 255, 0.04);
+  --ho-border-active: rgba(255, 255, 255, 0.08);
+
+  --ho-text-primary: rgba(255, 255, 255, 0.82);
+  --ho-text-secondary: rgba(255, 255, 255, 0.40);
+  --ho-text-tertiary: rgba(255, 255, 255, 0.20);
+
+  --ho-accent: #7a9ec4;
+  --ho-accent-hover: #8aaed0;
+  --ho-accent-pressed: #6a8eb4;
+  --ho-accent-bg: rgba(122, 158, 196, 0.08);
+
+  --ho-safe: #6b9e7a;
+  --ho-warning: #c4a86a;
+  --ho-peak: #b47a7a;
+
+  --ho-track-v1: #6a8aaa;
+  --ho-track-v2: #7a9a6a;
+  --ho-track-v3: #8a7aaa;
+  --ho-track-a1: #aa8a6a;
+  --ho-track-a2: #8a6a8a;
+
+  --ho-marker: #c4a86a;
+
+  --ho-font-family-title: 'LaoJingHua', '老京华体', 'Noto Serif SC', 'Source Han Serif CN', serif;
+  --ho-font-family-body: 'MiSans', 'Mi Sans', 'Noto Sans SC', -apple-system, sans-serif;
+  --ho-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --ho-font-size-xs: 11px;
+  --ho-font-size-sm: 12px;
+  --ho-font-size-base: 13px;
+  --ho-font-size-md: 14px;
+  --ho-font-size-lg: 16px;
+  --ho-font-size-xl: 20px;
+  --ho-font-size-2xl: 24px;
+
+  --ho-radius-sm: 6px;
+  --ho-radius-md: 8px;
+  --ho-radius-lg: 12px;
+
+  --ho-transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ho-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ho-transition-expand: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,28 @@
+{
+  "prefix": "https://torappu.prts.wiki/assets/char_spine/char_1037_amiya3/",
+  "name": "阿米娅",
+  "skin": {
+    "寰宇独奏": {
+      "正面": {
+        "file": "char_1037_amiya3_sale_13/front/char_1037_amiya3_sale_13"
+      },
+      "背面": {
+        "file": "char_1037_amiya3_sale_13/back/char_1037_amiya3_sale_13"
+      },
+      "基建": {
+        "file": "char_1037_amiya3_sale_13/build/build_char_1037_amiya3_sale_13"
+      }
+    },
+    "默认": {
+      "背面": {
+        "file": "defaultskin/back/char_1037_amiya3"
+      },
+      "基建": {
+        "file": "defaultskin/build/build_char_1037_amiya3"
+      },
+      "正面": {
+        "file": "defaultskin/front/char_1037_amiya3"
+      }
+    }
+  }
+}

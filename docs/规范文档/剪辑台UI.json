@@ -1,0 +1,541 @@
+{
+  "meta": {
+    "version": "2.0",
+    "scope": "page",
+    "unit": "px",
+    "rootCount": 1,
+    "imageCount": 0
+  },
+  "nodes": [
+    {
+      "id": "4:0",
+      "name": "剪辑台",
+      "type": "FRAME",
+      "style": {
+        "width": 1440,
+        "height": 1024,
+        "background": "#FFFFFF",
+        "overflow": "hidden"
+      },
+      "children": [
+        {
+          "id": "4:06",
+          "name": "时间线",
+          "type": "FRAME",
+          "position": {
+            "x": 299,
+            "y": 569
+          },
+          "style": {
+            "width": 1012,
+            "height": 455,
+            "background": "#878181",
+            "overflow": "hidden"
+          },
+          "children": [
+            {
+              "id": "4:0449",
+              "name": "时间线缩略图",
+              "type": "FRAME",
+              "position": {
+                "x": 845,
+                "y": 382
+              },
+              "style": {
+                "width": 167,
+                "height": 73,
+                "background": "#FFFFFF",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0452",
+              "name": "轨道控制台",
+              "type": "FRAME",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 80,
+                "height": 455,
+                "background": "#FFFFFF",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0455",
+              "name": "播放头",
+              "type": "FRAME",
+              "position": {
+                "x": 169,
+                "y": 0
+              },
+              "asset": {
+                "type": "svg",
+                "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" fill=\"none\" version=\"1.1\" width=\"34\" height=\"455\" viewBox=\"0 0 34 455\"><defs><clipPath id=\"master_svg0_4_0455\"><rect x=\"-2\" y=\"-2\" width=\"38\" height=\"459\" rx=\"0\"/></clipPath></defs><g clip-path=\"url(#master_svg0_4_0455)\"><path d=\"M37,20L45.660253999999995,35L28.3397461,35L37,20Z\" fill=\"#D8D8D8\" fill-opacity=\"1\" transform=\"matrix(-1,0,0,-1,54,40)\"/><line x1=\"16.001007080078125\" y1=\"19\" x2=\"451.0010070800781\" y2=\"19\" fill-opacity=\"0\" stroke-opacity=\"1\" stroke=\"#D8D8D8\" fill=\"none\" stroke-width=\"2\" transform=\"matrix(0,1,-1,0,36.001007080078125,3.998992919921875)\"/></g></svg>"
+              },
+              "style": {
+                "width": 34,
+                "height": 455,
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0593",
+              "name": "时码刻度与时码值及旗标显示",
+              "type": "FRAME",
+              "position": {
+                "x": 80,
+                "y": 0
+              },
+              "style": {
+                "width": 932,
+                "height": 32,
+                "overflow": "hidden"
+              }
+            }
+          ]
+        },
+        {
+          "id": "4:04",
+          "name": "字幕样式库及特效库",
+          "type": "FRAME",
+          "position": {
+            "x": 0,
+            "y": 512
+          },
+          "style": {
+            "width": 299,
+            "height": 512,
+            "background": "#C89191",
+            "overflow": "hidden"
+          }
+        },
+        {
+          "id": "4:03",
+          "name": "时间线工具",
+          "type": "FRAME",
+          "position": {
+            "x": 299,
+            "y": 512
+          },
+          "style": {
+            "width": 1141,
+            "height": 57,
+            "background": "#5B5151",
+            "overflow": "hidden"
+          },
+          "children": [
+            {
+              "id": "4:626",
+              "name": "暂停or继续",
+              "type": "FRAME",
+              "position": {
+                "x": 420,
+                "y": 21
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0596",
+              "name": "跳转下一个旗标",
+              "type": "FRAME",
+              "position": {
+                "x": 571,
+                "y": 21
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0594",
+              "name": "新建旗标",
+              "type": "FRAME",
+              "position": {
+                "x": 543,
+                "y": 21
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0595",
+              "name": "跳转上一个旗标",
+              "type": "FRAME",
+              "position": {
+                "x": 515,
+                "y": 21
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0438",
+              "name": "切刀",
+              "type": "FRAME",
+              "position": {
+                "x": 67,
+                "y": 20
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:625",
+              "name": "磁吸",
+              "type": "FRAME",
+              "position": {
+                "x": 31,
+                "y": 20
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 18,
+                "height": 18,
+                "background": "#9B3B3B",
+                "overflow": "hidden"
+              }
+            },
+            {
+              "id": "4:0037",
+              "name": "播放头时码",
+              "type": "FRAME",
+              "position": {
+                "x": 910,
+                "y": 15
+              },
+              "constraints": {
+                "horizontal": "center",
+                "vertical": "center"
+              },
+              "style": {
+                "width": 190,
+                "height": 26,
+                "background": "#FFFFFF",
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "id": "4:0177",
+                  "name": "01 : 00 : 00",
+                  "type": "TEXT",
+                  "position": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "constraints": {
+                    "horizontal": "center",
+                    "vertical": "center"
+                  },
+                  "style": {
+                    "width": 190
+                  },
+                  "text": {
+                    "content": "01 : 00 : 00",
+                    "fontFamily": "MiSans",
+                    "fontSize": 22,
+                    "fontWeight": 400,
+                    "lineHeight": 29,
+                    "color": "#3D3D3D",
+                    "textAlign": "center",
+                    "resize": "auto-height"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "4:0439",
+              "name": "时间线缩放滑条",
+              "type": "COMPONENT",
+              "position": {
+                "x": 714,
+                "y": 15
+              },
+              "style": {
+                "width": 181,
+                "height": 26,
+                "background": "#FFFFFF",
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "id": "4:0442",
+                  "name": "直线 1",
+                  "type": "LINE",
+                  "position": {
+                    "x": 13,
+                    "y": 13
+                  },
+                  "asset": {
+                    "type": "svg",
+                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" fill=\"none\" version=\"1.1\" width=\"154.003334996778\" height=\"2.006535451760085\" viewBox=\"0 0 154.003334996778 2.006535451760085\"><line x1=\"0.00004243735384079628\" y1=\"0.5065354517600849\" x2=\"154.00329255942415\" y2=\"0.5065354517600849\" fill-opacity=\"0\" stroke-opacity=\"1\" stroke=\"#D8D8D8\" fill=\"none\" stroke-width=\"1\" transform=\"matrix(1,-0.00004243710282025859,0.00004243735384079628,1,-0.00004271470111964846,1.8009183033740328e-9)\"/></svg>"
+                  },
+                  "style": {
+                    "width": 154,
+                    "height": 0,
+                    "border": "1px solid #D8D8D8"
+                  }
+                },
+                {
+                  "id": "4:0448",
+                  "name": "圆形 1",
+                  "type": "ELLIPSE",
+                  "position": {
+                    "x": 66,
+                    "y": 7
+                  },
+                  "constraints": {
+                    "horizontal": "center",
+                    "vertical": "center"
+                  },
+                  "style": {
+                    "width": 12,
+                    "height": 12,
+                    "background": "#D8D8D8",
+                    "borderRadius": "50%"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4:00",
+          "name": "素材库",
+          "type": "FRAME",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "style": {
+            "width": 299,
+            "height": 512,
+            "background": "#924545",
+            "overflow": "hidden"
+          }
+        },
+        {
+          "id": "4:02",
+          "name": "元数据及属性面板",
+          "type": "FRAME",
+          "position": {
+            "x": 1180,
+            "y": 0
+          },
+          "style": {
+            "width": 261,
+            "height": 512,
+            "background": "#986363",
+            "overflow": "hidden"
+          }
+        },
+        {
+          "id": "4:01",
+          "name": "实时监看",
+          "type": "FRAME",
+          "position": {
+            "x": 299,
+            "y": 0
+          },
+          "style": {
+            "width": 881,
+            "height": 512,
+            "background": "#968484",
+            "overflow": "hidden"
+          }
+        },
+        {
+          "id": "4:05",
+          "name": "音频响度uv及控制",
+          "type": "FRAME",
+          "position": {
+            "x": 1311,
+            "y": 569
+          },
+          "style": {
+            "width": 130,
+            "height": 455,
+            "background": "#9C4444",
+            "overflow": "hidden"
+          },
+          "children": [
+            {
+              "id": "4:0458",
+              "name": "响度",
+              "type": "FRAME",
+              "position": {
+                "x": 65,
+                "y": 0
+              },
+              "style": {
+                "width": 65,
+                "height": 455,
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "id": "4:0460",
+                  "name": "响度uv",
+                  "type": "FRAME",
+                  "position": {
+                    "x": 12,
+                    "y": 37
+                  },
+                  "style": {
+                    "width": 31,
+                    "height": 381,
+                    "background": "#376F61",
+                    "overflow": "hidden"
+                  },
+                  "children": [
+                    {
+                      "id": "4:0575",
+                      "name": "右声道",
+                      "type": "FRAME",
+                      "position": {
+                        "x": 16,
+                        "y": 0
+                      },
+                      "style": {
+                        "width": 15,
+                        "height": 381,
+                        "overflow": "hidden"
+                      }
+                    },
+                    {
+                      "id": "4:0576",
+                      "name": "左声道",
+                      "type": "FRAME",
+                      "position": {
+                        "x": 1,
+                        "y": 0
+                      },
+                      "style": {
+                        "width": 15,
+                        "height": 381,
+                        "overflow": "hidden"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "4:0461",
+                  "name": "响度数字标识",
+                  "type": "FRAME",
+                  "position": {
+                    "x": 43,
+                    "y": 37
+                  },
+                  "style": {
+                    "width": 11,
+                    "height": 381,
+                    "background": "#FFFFFF",
+                    "overflow": "hidden"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "4:0459",
+              "name": "响度滑块控制及轨道切换",
+              "type": "FRAME",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "style": {
+                "width": 65,
+                "height": 455,
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "id": "4:0577",
+                  "name": "轨道切换（默认总线bus）",
+                  "type": "FRAME",
+                  "position": {
+                    "x": 15,
+                    "y": 12
+                  },
+                  "constraints": {
+                    "horizontal": "center",
+                    "vertical": "center"
+                  },
+                  "style": {
+                    "width": 35,
+                    "height": 24,
+                    "background": "#441D1D",
+                    "overflow": "hidden"
+                  }
+                },
+                {
+                  "id": "4:0592",
+                  "name": "响度滑块",
+                  "type": "FRAME",
+                  "position": {
+                    "x": 15,
+                    "y": 36
+                  },
+                  "style": {
+                    "width": 35,
+                    "height": 383,
+                    "overflow": "hidden"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
