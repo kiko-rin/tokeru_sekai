@@ -8,6 +8,7 @@ import { Tag } from '../components/ui/Tag'
 import { Input } from '../components/ui/Input'
 import { NewProjectDialog } from '../components/tabs/NewProjectDialog'
 import { SettingsPage } from '../components/tabs/SettingsPage'
+import { DITPanel } from '../components/tabs/DITPanel'
 import { useUIStore } from '../stores/uiStore'
 
 interface Project {
@@ -81,6 +82,17 @@ export function ProjectManager() {
           <SideNav activeItem={activeNav} onItemClick={setActiveNav} />
         )}
         <SettingsPage />
+      </div>
+    )
+  }
+
+  if (activeNav === 'assets') {
+    return (
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        {!sidebarCollapsed && (
+          <SideNav activeItem={activeNav} onItemClick={setActiveNav} />
+        )}
+        <DITPanel />
       </div>
     )
   }

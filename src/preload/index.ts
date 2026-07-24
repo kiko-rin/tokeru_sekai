@@ -1,22 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-export interface DialogFilter {
-  name: string
-  extensions: string[]
-}
-
-export interface OpenDialogOptions {
-  title?: string
-  defaultPath?: string
-  filters?: DialogFilter[]
-  properties?: Array<'openFile' | 'openDirectory' | 'multiSelections'>
-}
-
-export interface SaveDialogOptions {
-  title?: string
-  defaultPath?: string
-  filters?: DialogFilter[]
-}
+export interface DialogFilter { name: string; extensions: string[] }
+export interface OpenDialogOptions { title?: string; defaultPath?: string; filters?: DialogFilter[]; properties?: Array<'openFile' | 'openDirectory' | 'multiSelections'> }
+export interface SaveDialogOptions { title?: string; defaultPath?: string; filters?: DialogFilter[] }
 
 const electronAPI = {
   app: {
@@ -34,6 +20,16 @@ const electronAPI = {
     saveFile: (options: SaveDialogOptions): Promise<string | null> => ipcRenderer.invoke('dialog:save-file', options),
     openDirectory: (options: OpenDialogOptions): Promise<string | null> => ipcRenderer.invoke('dialog:open-directory', options)
   },
+  dit: {
+    scanCard: (cardPath: string): Promise<{ success: boolean; files?: { name: string; path: string; size: number; mtime: number }[]; totalSize?: number; cardLabel?: string; error?: string }> =>
+      ipcRenderer.invoke('dit:scan-card', cardPath),
+    computeHash: (filePath: string, algorithm: string): Promise<{ success: boolean; hash?: string; algorithm?: string; error?: string }> =>
+      ipcRenderer.invoke('dit:compute-hash', filePath, algorithm),
+    copyFile: (srcPath: string, destPath: string, algorithm: string): Promise<{ success: boolean; copiedBytes?: number; destHash?: string; algorithm?: string; error?: string }> =>
+      ipcRenderer.invoke('dit:copy-file', srcPath, destPath, algorithm),
+    getCardLabel: (cardPath: string): Promise<{ success: boolean; label?: string; error?: string }> =>
+      ipcRenderer.invoke('dit:get-card-label', cardPath)
+  },
   fs: {
     readTextFile: (path: string): Promise<string> => ipcRenderer.invoke('fs:read-text-file', path),
     writeTextFile: (path: string, content: string): Promise<void> => ipcRenderer.invoke('fs:write-text-file', path, content),
@@ -48,15 +44,11 @@ const electronAPI = {
   },
   on: (channel: string, callback: (...args: unknown[]) => void) => {
     const validChannels: string[] = ['app:update-available', 'app:download-progress', 'window:state-changed']
-    if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (_event, ...args) => callback(...args))
-    }
+    if (validChannels.includes(channel)) ipcRenderer.on(channel, (_event, ...args) => callback(...args))
   },
   off: (channel: string, callback: (...args: unknown[]) => void) => {
     const validChannels: string[] = ['app:update-available', 'app:download-progress', 'window:state-changed']
-    if (validChannels.includes(channel)) {
-      ipcRenderer.removeListener(channel, callback)
-    }
+    if (validChannels.includes(channel)) ipcRenderer.removeListener(channel, callback)
   }
 }
 

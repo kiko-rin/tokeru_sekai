@@ -1,20 +1,10 @@
-export interface DialogFilter {
-  name: string
-  extensions: string[]
-}
+export interface DialogFilter { name: string; extensions: string[] }
+export interface OpenDialogOptions { title?: string; defaultPath?: string; filters?: DialogFilter[]; properties?: Array<'openFile' | 'openDirectory' | 'multiSelections'> }
+export interface SaveDialogOptions { title?: string; defaultPath?: string; filters?: DialogFilter[] }
 
-export interface OpenDialogOptions {
-  title?: string
-  defaultPath?: string
-  filters?: DialogFilter[]
-  properties?: Array<'openFile' | 'openDirectory' | 'multiSelections'>
-}
-
-export interface SaveDialogOptions {
-  title?: string
-  defaultPath?: string
-  filters?: DialogFilter[]
-}
+export interface DITScanResult { success: boolean; files?: { name: string; path: string; size: number; mtime: number }[]; totalSize?: number; cardLabel?: string; error?: string }
+export interface DITHashResult { success: boolean; hash?: string; algorithm?: string; error?: string }
+export interface DITCopyResult { success: boolean; copiedBytes?: number; destHash?: string; algorithm?: string; error?: string }
 
 export interface ElectronAPI {
   app: {
@@ -31,6 +21,12 @@ export interface ElectronAPI {
     openFile: (options: OpenDialogOptions) => Promise<string[] | null>
     saveFile: (options: SaveDialogOptions) => Promise<string | null>
     openDirectory: (options: OpenDialogOptions) => Promise<string | null>
+  }
+  dit: {
+    scanCard: (cardPath: string) => Promise<DITScanResult>
+    computeHash: (filePath: string, algorithm: string) => Promise<DITHashResult>
+    copyFile: (srcPath: string, destPath: string, algorithm: string) => Promise<DITCopyResult>
+    getCardLabel: (cardPath: string) => Promise<{ success: boolean; label?: string; error?: string }>
   }
   fs: {
     readTextFile: (path: string) => Promise<string>

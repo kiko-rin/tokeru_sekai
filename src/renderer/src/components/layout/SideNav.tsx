@@ -9,7 +9,7 @@ interface SideNavProps {
 const TOP_ITEMS: { id: string; label: string; icon: IconName }[] = [
   { id: 'home', label: '首页', icon: 'home' },
   { id: 'projects', label: '项目', icon: 'folder' },
-  { id: 'assets', label: '素材库', icon: 'search' },
+  { id: 'assets', label: '素材库', icon: 'folder' },
   { id: 'templates', label: '模板', icon: 'copy' }
 ]
 

@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron'
 import { join } from 'path'
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, statSync, copyFileSync } from 'fs'
+import { createHash } from 'crypto'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -34,6 +35,60 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+}
+
+function computeFileHash(filePath: string, algorithm: string): string {
+  const hash = createHash(algorithm)
+  const chunkSize = 64 * 1024
+  const fd = readFileSync(filePath)
+  let offset = 0
+  while (offset < fd.length) {
+    const chunk = fd.subarray(offset, Math.min(offset + chunkSize, fd.length))
+    hash.update(chunk)
+    offset += chunkSize
+  }
+  return hash.digest('hex')
+}
+
+function scanDirectory(dirPath: string): { files: { name: string; path: string; size: number; mtime: number }[]; totalSize: number } {
+  const results: { name: string; path: string; size: number; mtime: number }[] = []
+  let totalSize = 0
+
+  function walk(currentPath: string) {
+    const entries = readdirSync(currentPath, { withFileTypes: true })
+    for (const entry of entries) {
+      const fullPath = join(currentPath, entry.name)
+      if (entry.isDirectory()) {
+        if (!entry.name.startsWith('.')) walk(fullPath)
+      } else if (entry.isFile()) {
+        const mediaExts = ['.mp4','.mov','.avi','.mxf','.r3d','.arw','.cr2','.nef','.dng','.tif','.tiff','.jpg','.jpeg','.png','.bmp','.wav','.mp3','.aac','.flac','.m4a','.srt','.ass','.lrt','.cube','.3dl','.drp','.zip','.7z']
+        const ext = entry.name.toLowerCase().substring(entry.name.lastIndexOf('.'))
+        if (mediaExts.includes(ext)) {
+          const stat = statSync(fullPath)
+          results.push({ name: entry.name, path: fullPath, size: stat.size, mtime: stat.mtimeMs })
+          totalSize += stat.size
+        }
+      }
+    }
+  }
+
+  walk(dirPath)
+  return { files: results.sort((a, b) => a.name.localeCompare(b.name)), totalSize }
+}
+
+function copyWithVerify(srcPath: string, destPath: string, algorithm: string, onProgress?: (bytes: number) => void): { copiedBytes: number; hash: string } {
+  const srcBuffer = readFileSync(srcPath)
+  const destDir = destPath.substring(0, Math.max(destPath.lastIndexOf('/'), destPath.lastIndexOf('\\')))
+  if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true })
+
+  // Copy
+  writeFileSync(destPath, srcBuffer)
+  onProgress?.(srcBuffer.length)
+
+  // Verify: compute hash of destination
+  const destHash = computeFileHash(destPath, algorithm)
+
+  return { copiedBytes: srcBuffer.length, hash: destHash }
 }
 
 function registerIpcHandlers(): void {
@@ -74,6 +129,47 @@ function registerIpcHandlers(): void {
     })
     return result.canceled ? null : (result.filePaths[0] || null)
   })
+
+  // === DIT IPC handlers ===
+
+  ipcMain.handle('dit:scan-card', async (_e, cardPath: string) => {
+    try {
+      const { files, totalSize } = scanDirectory(cardPath)
+      const cardLabel = cardPath.split(/[/\\]/).pop() || 'Unnamed Card'
+      return { success: true, files, totalSize, cardLabel }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:compute-hash', async (_e, filePath: string, algorithm: string) => {
+    try {
+      const hash = computeFileHash(filePath, algorithm || 'sha256')
+      return { success: true, hash, algorithm }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:copy-file', async (_e, srcPath: string, destPath: string, algorithm: string) => {
+    try {
+      const { copiedBytes, hash } = copyWithVerify(srcPath, destPath, algorithm)
+      return { success: true, copiedBytes, destHash: hash, algorithm }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:get-card-label', async (_e, cardPath: string) => {
+    try {
+      const label = cardPath.split(/[/\\]/).pop() || 'Unnamed Card'
+      return { success: true, label }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  // === End DIT ===
 
   ipcMain.handle('fs:read-text-file', async (_e, path: string) => {
     return readFileSync(path, 'utf-8')
