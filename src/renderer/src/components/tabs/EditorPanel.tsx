@@ -38,12 +38,9 @@ export function EditorPanel() {
 
   useEffect(() => {
     if (tracks.length > 0) return
+    // Initialize with empty tracks - no sample clips
     setTracks([
-      { id:'t1', name:'V1', type:'video', muted:false, locked:false, clips:[
-        { id:'c1', name:'开场镜头', filePath:'', duration:5.4, start:0.5, trackId:'t1', width:1920, height:1080, fps:30, codec:'H264' as any, colorSpace:'Rec709' as any, colorDepth:8 as any, chromaSubsampling:'YUV420' as any },
-        { id:'c2', name:'产品展示', filePath:'', duration:9.0, start:6.2, trackId:'t1', width:1920, height:1080, fps:30, codec:'H264' as any, colorSpace:'Rec709' as any, colorDepth:8 as any, chromaSubsampling:'YUV420' as any },
-        { id:'c3', name:'结尾', filePath:'', duration:7.5, start:22.5, trackId:'t1', width:1920, height:1080, fps:30, codec:'H264' as any, colorSpace:'Rec709' as any, colorDepth:8 as any, chromaSubsampling:'YUV420' as any }
-      ]},
+      { id:'t1', name:'V1', type:'video', muted:false, locked:false, clips:[] },
       { id:'t2', name:'V2', type:'video', muted:false, locked:false, clips:[] },
       { id:'t3', name:'V3', type:'video', muted:false, locked:false, clips:[] },
       { id:'t4', name:'A1', type:'audio', muted:false, locked:false, clips:[] },

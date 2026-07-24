@@ -14,26 +14,9 @@ interface Scene {
 
 const PARAGRAPH_TYPES = ['场景描述', '对白', '动作指示', '镜头指示']
 
-const MOCK_SCENES: Scene[] = [
-  { id: 's1', name: '开场', expanded: true, shots: [
-    { id: 'sh1', name: '镜头1.1', script: '城市黄昏全景，镜头从高空缓缓下降，穿过云层，城市灯火逐渐清晰。', paragraphType: '场景描述' },
-    { id: 'sh2', name: '镜头1.2', script: '旁白：在这座城市里，每个人都有自己的故事...', paragraphType: '对白' },
-    { id: 'sh3', name: '镜头1.3', script: '（镜头缓慢推进，光线逐渐变化）', paragraphType: '动作指示' }
-  ]},
-  { id: 's2', name: '主体展示', expanded: false, shots: [{ id: 'sh4', name: '镜头2.1', script: '产品细节特写，360度旋转展示。', paragraphType: '场景描述' }] },
-  { id: 's3', name: '结尾', expanded: false, shots: [] }
-]
+const MOCK_SCENES: Scene[] = []
 
-const MOCK_MATERIALS = [
-  { name: '城市航拍.mp4', duration: '00:15', type: 'video' },
-  { name: '日落延时.mp4', duration: '00:08', type: 'video' },
-  { name: '公园全景.mp4', duration: '00:12', type: 'video' },
-  { name: '夜景灯光.mp4', duration: '00:20', type: 'video' },
-  { name: '街道人流.mp4', duration: '00:10', type: 'video' },
-  { name: 'Logo.png', duration: '-', type: 'image' },
-  { name: '音效01.wav', duration: '00:03', type: 'audio' },
-  { name: '转场特效.mp4', duration: '00:05', type: 'effect' }
-]
+const MOCK_MATERIALS: { name: string; duration: string; type: string }[] = []
 
 export function OutlinePanel() {
   const [scenes, setScenes] = useState(MOCK_SCENES)
@@ -108,7 +91,12 @@ export function OutlinePanel() {
       <div style={{ width: 240, borderRight: '1px solid var(--ho-border)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
         <div style={{ padding: '12px 16px', fontSize: 14, fontFamily: 'var(--ho-font-family-title)', color: 'var(--ho-text-primary)', borderBottom: '1px solid var(--ho-border)' }}>项目大纲</div>
         <div style={{ flex: 1, overflow: 'auto', padding: '4px 0' }}>
-          {scenes.map((scene) => (
+          {scenes.length === 0 ? (
+            <div style={{ padding: 20, textAlign: 'center', fontSize: 11, color: 'var(--ho-text-tertiary)' }}>
+              暂无场景，点击下方按钮添加
+            </div>
+          ) : (
+          scenes.map((scene) => (
             <div key={scene.id}>
               <div
                 onClick={() => toggleScene(scene.id)}
@@ -138,7 +126,8 @@ export function OutlinePanel() {
                 </div>
               ))}
             </div>
-          ))}
+          ))
+        )}
         </div>
         <div style={{ padding: '12px', borderTop: '1px solid var(--ho-border)', display: 'flex', gap: 6 }}>
           <Button variant="ghost" style={{ fontSize: 11, height: 28 }} onClick={addScene}><Icon name="plus" size={12} /> 场景</Button>

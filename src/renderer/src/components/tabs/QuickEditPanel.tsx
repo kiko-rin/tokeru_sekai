@@ -12,14 +12,7 @@ interface StoryboardItem {
   materialIndex: number
 }
 
-const MOCK_MATERIALS = [
-  { name: '城市航拍.mp4', duration: '00:15', thumb: '#' },
-  { name: '日落延时.mp4', duration: '00:08', thumb: '#' },
-  { name: '公园全景.mp4', duration: '00:12', thumb: '#' },
-  { name: '夜景灯光.mp4', duration: '00:20', thumb: '#' },
-  { name: '街道人流.mp4', duration: '00:10', thumb: '#' },
-  { name: '河流水面.mp4', duration: '00:06', thumb: '#' }
-]
+const MOCK_MATERIALS: { name: string; duration: string; thumb: string }[] = []
 
 const TRANSITIONS = [
   { name: '溶解', symbol: '*' },
@@ -37,12 +30,7 @@ export function QuickEditPanel() {
   const [durationPerClip, setDurationPerClip] = useState(5)
   const [speed, setSpeed] = useState(100)
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
-  const [storyboardItems, setStoryboardItems] = useState<StoryboardItem[]>([
-    { id: 0, name: '城市航拍.mp4', materialIndex: 0 },
-    { id: 1, name: '日落延时.mp4', materialIndex: 1 },
-    { id: 2, name: '公园全景.mp4', materialIndex: 2 },
-    { id: 3, name: '夜景灯光.mp4', materialIndex: 3 },
-  ])
+  const [storyboardItems, setStoryboardItems] = useState<StoryboardItem[]>([])
 
   const { onDragStart, onDrop, onDragOver } = useDragDrop()
   const { importMedia, ImportDialog } = useDITImport()
@@ -128,7 +116,12 @@ export function QuickEditPanel() {
           <span style={{ fontSize: 11, color: 'var(--ho-text-secondary)' }}>秒</span>
         </div>
         <div style={{ flex: 1, overflow: 'auto', padding: '16px', display: 'flex', gap: 12, alignItems: 'flex-start', alignContent: 'flex-start', flexWrap: 'wrap' }} onDrop={onDrop(handleDropOnStoryboard)} onDragOver={onDragOver}>
-          {storyboardItems.map((item, i) => (
+          {storyboardItems.length === 0 ? (
+            <div style={{ width: '100%', padding: 40, textAlign: 'center', fontSize: 11, color: 'var(--ho-text-tertiary)' }}>
+              从左侧拖拽素材到此处创建故事板
+            </div>
+          ) : (
+          storyboardItems.map((item, i) => (
             <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div
                 onClick={() => setSelectedIdx(i)}
@@ -147,7 +140,8 @@ export function QuickEditPanel() {
               </div>
               {i < storyboardItems.length - 1 && <Icon name="chevron-right" size={16} color="var(--ho-text-tertiary)" />}
             </div>
-          ))}
+          ))
+        )}
         </div>
         <div style={{ height: 36, borderTop: '1px solid var(--ho-border)', display: 'flex', alignItems: 'center', padding: '0 12px', justifyContent: 'space-between', flexShrink: 0 }}>
           <span style={{ fontSize: 11, color: 'var(--ho-text-tertiary)' }}>总时长: {totalStr}</span>
@@ -182,9 +176,9 @@ export function QuickEditPanel() {
               }}>
                 <div style={{ fontSize: 16, color: 'var(--ho-text-secondary)', marginBottom: 4 }}>{t.symbol}</div>
                 <div style={{ fontSize: 11, color: 'var(--ho-text-secondary)' }}>{t.name}</div>
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
         </div>
       </div>
       {ImportDialog}
