@@ -48,6 +48,10 @@ export interface ElectronAPI {
     save: (path: string, data: unknown) => Promise<void>
     load: (path: string) => Promise<unknown>
   }
+  encoder: {
+    detect: () => Promise<{ available: string[]; recommended: string; details: { name: string; available: boolean; vendor: string }[] }>
+    verify: (encoderName: string) => Promise<{ available: boolean; recommended: string; details: { name: string; available: boolean; vendor: string }[] }>
+  }
   on: (channel: string, callback: (...args: unknown[]) => void) => void
   off: (channel: string, callback: (...args: unknown[]) => void) => void
 }

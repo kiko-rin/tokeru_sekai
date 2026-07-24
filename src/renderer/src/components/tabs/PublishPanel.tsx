@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { Button } from '../ui/Button'
 import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
@@ -65,6 +65,24 @@ export function PublishPanel() {
   const [profile, setProfile] = useState('high')
   const [bFrames, setBFrames] = useState(3)
   const [gop, setGop] = useState(250)
+  const [encoderDetected, setEncoderDetected] = useState<string[]>([])
+  const [encoderVendor, setEncoderVendor] = useState('')
+  const [encoderChecking, setEncoderChecking] = useState(true)
+
+  // Auto-detect encoders on mount
+  useEffect(() => {
+    (async () => {
+      const api = (window as any).electronAPI
+      if (!api?.encoder) { setEncoderChecking(false); return }
+      const result = await api.encoder.detect()
+      setEncoderDetected(result.available)
+      const detected = result.details.find((d: any) => d.name === result.recommended)
+      setEncoderVendor(detected?.vendor || '')
+      // Auto-select: NV > Intel > AMD > Software
+      setEncoder(result.recommended)
+      setEncoderChecking(false)
+    })()
+  }, [])
 
   const projectDuration = useMemo(() => {
     let maxEnd = 0
@@ -208,10 +226,18 @@ export function PublishPanel() {
 
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginTop:12 }}>
             <div>
-              <div style={{ fontSize:10, color:'var(--ho-text-tertiary)', marginBottom:3 }}>编码器</div>
-              <select value={encoder} onChange={e=>setEncoder(e.target.value)} disabled={codec === 'VP9' || codec === 'AV1'} style={{ width:'100%', height:30, backgroundColor:'var(--ho-bg-tertiary)', border:'1px solid var(--ho-border)', borderRadius:4, color:(codec==='VP9'||codec==='AV1')?'var(--ho-text-tertiary)':'var(--ho-text-secondary)', fontSize:12, padding:'0 8px', outline:'none' }}>
-                <option>软件编码</option><option>NVIDIA NVENC</option><option>AMD AMF</option><option>Intel QSV</option>
-              </select>
+              <div style={{ fontSize:10, color:'var(--ho-text-tertiary)', marginBottom:3 }}>编码器 {!encoderChecking && <span style={{ fontSize:8, color:'var(--ho-safe)' }}>自动</span>}</div>
+              <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+                <select value={encoder} onChange={e=>setEncoder(e.target.value)} disabled={codec === 'VP9' || codec === 'AV1'} style={{ flex:1, height:30, backgroundColor:'var(--ho-bg-tertiary)', border:'1px solid var(--ho-border)', borderRadius:4, color:(codec==='VP9'||codec==='AV1')?'var(--ho-text-tertiary)':'var(--ho-text-secondary)', fontSize:12, padding:'0 8px', outline:'none' }}>
+                  {['软件编码', 'NVIDIA NVENC', 'Intel QSV', 'AMD AMF'].map(e => (
+                    <option key={e} value={e} disabled={!encoderDetected.includes(e) && e !== '软件编码'}>{e}{!encoderDetected.includes(e) ? ' (不可用)' : ''}</option>
+                  ))}
+                </select>
+                {encoderChecking && <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', whiteSpace:'nowrap' }}>检测中...</span>}
+              </div>
+              {encoderVendor && !encoderChecking && (
+                <div style={{ fontSize:8, color:'var(--ho-text-tertiary)', marginTop:2 }}>已检测: {encoderVendor}</div>
+              )}
             </div>
             <div>
               <div style={{ fontSize:10, color:'var(--ho-text-tertiary)', marginBottom:3 }}>色彩空间</div>

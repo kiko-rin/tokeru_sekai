@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron'
 import { join, sep, relative } from 'path'
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, statSync, copyFileSync, renameSync, unlinkSync } from 'fs'
 import { createHash } from 'crypto'
+import { execSync } from 'child_process'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -272,6 +273,82 @@ function registerIpcHandlers(): void {
   })
 
   // === End DIT Project Config ===
+
+  // === Encoder Detection ===
+
+  function detectEncoders(): { available: string[]; recommended: string; details: { name: string; available: boolean; vendor: string }[] } {
+    const result: { name: string; available: boolean; vendor: string }[] = []
+    let recommended = '软件编码'
+
+    // Check NVIDIA (nvidia-smi)
+    try {
+      const nvidiaOut = execSync('nvidia-smi --query-gpu=name --format=csv,noheader', { timeout: 3000, encoding: 'utf-8' })
+      if (nvidiaOut.trim().length > 0) {
+        result.push({ name: 'NVIDIA NVENC', available: true, vendor: `NVIDIA ${nvidiaOut.trim().split('\n')[0]}` })
+      }
+    } catch {
+      result.push({ name: 'NVIDIA NVENC', available: false, vendor: 'not detected' })
+    }
+
+    // Check Intel QSV (check for Intel GPU via registry or CPU brand)
+    try {
+      const cpuInfo = execSync('wmic cpu get name', { timeout: 2000, encoding: 'utf-8' })
+      const hasIntel = cpuInfo.toLowerCase().includes('intel')
+      // Also check for Intel GPU
+      let hasIntelGPU = false
+      try {
+        const gpuInfo = execSync('wmic path win32_videocontroller get name', { timeout: 2000, encoding: 'utf-8' })
+        hasIntelGPU = gpuInfo.toLowerCase().includes('intel')
+      } catch {}
+      if (hasIntel || hasIntelGPU) {
+        result.push({ name: 'Intel QSV', available: true, vendor: hasIntelGPU ? 'Intel GPU detected' : 'Intel CPU detected' })
+      } else {
+        result.push({ name: 'Intel QSV', available: false, vendor: 'no Intel hardware' })
+      }
+    } catch {
+      result.push({ name: 'Intel QSV', available: false, vendor: 'check failed' })
+    }
+
+    // Check AMD AMF
+    try {
+      const gpuInfo = execSync('wmic path win32_videocontroller get name', { timeout: 2000, encoding: 'utf-8' })
+      if (gpuInfo.toLowerCase().includes('amd') || gpuInfo.toLowerCase().includes('radeon')) {
+        result.push({ name: 'AMD AMF', available: true, vendor: 'AMD GPU detected' })
+      } else {
+        result.push({ name: 'AMD AMF', available: false, vendor: 'no AMD hardware' })
+      }
+    } catch {
+      result.push({ name: 'AMD AMF', available: false, vendor: 'check failed' })
+    }
+
+    // Always available
+    result.push({ name: '软件编码', available: true, vendor: 'CPU (x264/x265)' })
+
+    // Pick recommended: NVIDIA > Intel > AMD > Software
+    const nvidia = result.find(r => r.name === 'NVIDIA NVENC')
+    if (nvidia?.available) { recommended = 'NVIDIA NVENC' }
+    else {
+      const intel = result.find(r => r.name === 'Intel QSV')
+      if (intel?.available) { recommended = 'Intel QSV' }
+      else {
+        const amd = result.find(r => r.name === 'AMD AMF')
+        if (amd?.available) { recommended = 'AMD AMF' }
+      }
+    }
+
+    return { available: result.filter(r => r.available).map(r => r.name), recommended, details: result }
+  }
+
+  ipcMain.handle('encoder:detect', async () => {
+    return detectEncoders()
+  })
+
+  ipcMain.handle('encoder:verify', async (_e, encoderName: string) => {
+    const result = detectEncoders()
+    return { available: result.available.includes(encoderName), recommended: result.recommended, details: result.details }
+  })
+
+  // === End Encoder Detection ===
 
   ipcMain.handle('fs:read-text-file', async (_e, path: string) => {
     return readFileSync(path, 'utf-8')

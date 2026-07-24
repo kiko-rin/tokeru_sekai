@@ -52,6 +52,12 @@ const electronAPI = {
     save: (path: string, data: unknown): Promise<void> => ipcRenderer.invoke('project:save', path, data),
     load: (path: string): Promise<unknown> => ipcRenderer.invoke('project:load', path)
   },
+  encoder: {
+    detect: (): Promise<{ available: string[]; recommended: string; details: { name: string; available: boolean; vendor: string }[] }> =>
+      ipcRenderer.invoke('encoder:detect'),
+    verify: (encoderName: string): Promise<{ available: boolean; recommended: string; details: { name: string; available: boolean; vendor: string }[] }> =>
+      ipcRenderer.invoke('encoder:verify', encoderName)
+  },
   on: (channel: string, callback: (...args: unknown[]) => void) => {
     const validChannels: string[] = ['app:update-available', 'app:download-progress', 'window:state-changed']
     if (validChannels.includes(channel)) ipcRenderer.on(channel, (_event, ...args) => callback(...args))
