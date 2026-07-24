@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Input } from '../ui/Input'
 import { Icon } from '../ui/Icon'
 import { useTimelineStore } from '../../stores/timelineStore'
@@ -58,9 +58,23 @@ export function EditorPanel() {
   })
 
   const ft = (s: number) =>
-    `${String(Math.floor(s/3600)).padStart(2,'0')} : ${String(Math.floor((s%3600)/60)).padStart(2,'0')} : ${String(Math.floor(s%60)).padStart(2,'0')}`
+    `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor((s%3600)/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}:${String(Math.floor(s*30%30)).padStart(2,'0')}`
 
-  const seek = (d: number) => setCurrentTime(Math.max(0, Math.min(TOTAL, currentTime + d)))
+  const tcRef = useRef<HTMLSpanElement>(null)
+  const monitorTcRef = useRef<HTMLSpanElement>(null)
+
+  // Sync timecode directly from store each animation frame
+  useEffect(() => {
+    const id = setInterval(() => {
+      const t = useTimelineStore.getState().currentTime
+      const str = `${String(Math.floor(t/3600)).padStart(2,'0')}:${String(Math.floor((t%3600)/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}:${String(Math.floor(t*30%30)).padStart(2,'0')}`
+      if (tcRef.current) tcRef.current.textContent = str
+      if (monitorTcRef.current) monitorTcRef.current.textContent = str
+    }, 33)
+    return () => clearInterval(id)
+  }, [])
+
+  const seek = (d: number) => setCurrentTime(Math.max(0, Math.min(TOTAL, useTimelineStore.getState().currentTime + d)))
 
   const tlClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect()
@@ -122,7 +136,7 @@ export function EditorPanel() {
             <div style={{ width:'90%', aspectRatio:'16/9', backgroundColor:'#000', borderRadius:4, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <span style={{ fontSize:13, color:'var(--ho-text-tertiary)' }}>实时监看</span>
             </div>
-            <div style={{ position:'absolute', bottom:16, left:20, fontFamily:'monospace', color:'var(--ho-accent)', fontSize:13 }}>{ft(currentTime)}</div>
+            <div style={{ position:'absolute', bottom:16, left:20, fontFamily:'monospace', color:'var(--ho-accent)', fontSize:13 }}><span ref={monitorTcRef}>{ft(currentTime)}</span></div>
             <div style={{ position:'absolute', bottom:16, right:20, fontSize:12, color:'var(--ho-text-tertiary)' }}>1920x1080 - 30fps</div>
           </div>
           {/* 元数据及属性面板 261px */}
@@ -179,8 +193,8 @@ export function EditorPanel() {
             </svg>
             <span style={{ fontSize:10, fontFamily:'monospace', color:'var(--ho-accent)', width:28, textAlign:'right' }}>{zoom}%</span>
           </div>
-          {/* 播放头时码 x:910, w:190 (spec: 01 : 00 : 00) */}
-          <span style={{ fontFamily:'monospace', color:'var(--ho-text-primary)', fontSize:22, letterSpacing:2, minWidth:140, textAlign:'center' }}>{ft(currentTime)}</span>
+          {/* 播放头时码 x:910, w:190 (spec: 01 : 00 : 00) — 直接从store读取刷新 */}
+          <span ref={tcRef} style={{ fontFamily:'monospace', color:'var(--ho-text-primary)', fontSize:22, letterSpacing:2, minWidth:140, textAlign:'center' }}>{ft(currentTime)}</span>
         </div>
 
         {/* ROW 3: 时间线(1012px spec) + 音频响度(130px spec) */}
