@@ -31,7 +31,7 @@ export function EditorPanel() {
   const totalDuration = useMemo(() => computeTotalDuration(tracks), [tracks])
   const [inPoint, setInPoint] = useState(0)
   const [outPoint, setOutPoint] = useState(totalDuration)
-  const { importMedia, ImportDialog } = useDITImport()
+  const { importMedia, ImportDialog, isImporting, importProgress } = useDITImport()
 
   // Keep outPoint in sync with totalDuration
   useEffect(() => { setOutPoint(totalDuration) }, [totalDuration])
@@ -119,7 +119,9 @@ export function EditorPanel() {
           </div>
           <div style={{ padding:6 }}><Input placeholder="搜索..." value={mediaSearch} onChange={e=>setMediaSearch(e.target.value)} style={{ fontSize:11, height:28 }} /></div>
           <div style={{ padding:'0 6px 4px' }}>
-            <span style={{ fontSize:10, cursor:'pointer', color:'var(--ho-accent)' }} onClick={async () => { const files = await importMedia(); if (files.length > 0) console.log('DIT imported:', files.length) }}>+ DIT 导入</span>
+            <span style={{ fontSize:10, cursor: isImporting ? 'default' : 'pointer', color: isImporting ? 'var(--ho-text-tertiary)' : 'var(--ho-accent)', opacity: isImporting ? 0.4 : 1 }} onClick={async () => { if (isImporting) return; const files = await importMedia(); if (files.length > 0) console.log('DIT imported:', files.length) }}>
+              {isImporting ? `导入中 ${importProgress}%` : '+ DIT 导入'}
+            </span>
           </div>
           <div style={{ display:'flex', gap:4, padding:'4px 6px', flexShrink:0 }}>
             {['全部','视频','图片','音频'].map(f => (

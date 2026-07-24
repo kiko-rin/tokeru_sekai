@@ -34,6 +34,9 @@ export function useDITImport(options?: UseDITImportOptions) {
     importing: false, progress: 0, result: [], error: null
   })
 
+  const isImporting = confirm.importing
+  const importProgress = confirm.progress
+
   const closeDialog = () => setConfirm(prev => ({ ...prev, show: false, result: [], error: null }))
 
   const importMedia = async (): Promise<ImportResult[]> => {
@@ -193,7 +196,7 @@ export function useDITImport(options?: UseDITImportOptions) {
     </div>
   ) : null
 
-  return { importMedia, ImportDialog }
+  return { importMedia, ImportDialog, isImporting, importProgress }
 }
 
 function detectTypeForDIT(name: string): 'video' | 'audio' | 'image' | 'lut' | 'other' {

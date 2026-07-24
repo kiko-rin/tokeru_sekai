@@ -38,6 +38,8 @@ interface SettingsState {
   setCachePath: (path: string) => void
   setExportPath: (path: string) => void
   setActiveNav: (nav: string) => void
+  devMode: boolean
+  setDevMode: (on: boolean) => void
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
@@ -52,6 +54,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   cachePath: '~/2D-Workshop/Cache/',
   exportPath: '~/2D-Workshop/Export/',
   activeNav: 'general',
+  devMode: false,
   setLanguage: (lang) => set({ language: lang }),
   setTheme: (theme) => set({ theme }),
   setUiScale: (scale) => set({ uiScale: scale }),
@@ -73,5 +76,6 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   setProjectPath: (path) => set({ projectPath: path }),
   setCachePath: (path) => set({ cachePath: path }),
   setExportPath: (path) => set({ exportPath: path }),
-  setActiveNav: (nav) => set({ activeNav: nav })
+  setActiveNav: (nav) => set({ activeNav: nav }),
+  setDevMode: (on) => set({ devMode: on })
 }))

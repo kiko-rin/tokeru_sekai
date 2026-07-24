@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Button } from '../ui/Button'
 import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
@@ -6,8 +6,11 @@ import { Slider } from '../ui/Slider'
 import { Toggle } from '../ui/Toggle'
 import { Icon } from '../ui/Icon'
 import { useSettingsStore } from '../../stores/settingsStore'
+import { DevPanel } from './DevPanel'
 
 const NAV_ITEMS = ['常规','性能','色彩管理','快捷键','存储','插件','关于']
+
+const NAV_ITEMS_WITH_DEV = [...NAV_ITEMS, '开发']
 
 const SHORTCUTS = [
   { action:'保存', key:'Ctrl+S' },{ action:'撤销', key:'Ctrl+Z' },{ action:'重做', key:'Ctrl+Shift+Z' },
@@ -22,6 +25,9 @@ export function SettingsPage() {
   const [activeNav, setActiveNav] = useState('常规')
   const [shortcutSearch, setShortcutSearch] = useState('')
   const store = useSettingsStore()
+  const [showDevWarning, setShowDevWarning] = useState(false)
+
+  const navItems = store.devMode ? NAV_ITEMS_WITH_DEV : NAV_ITEMS
 
   const handleBrowse = useCallback(async (currentPath: string, setter: (p: string) => void) => {
     const api = (window as any).electronAPI
@@ -29,6 +35,19 @@ export function SettingsPage() {
     const dir = await api.dialog.openDirectory({ title:'选择目录', defaultPath: currentPath })
     if (dir) setter(dir)
   }, [])
+
+  const handleDevToggle = (on: boolean) => {
+    if (on) {
+      setShowDevWarning(true)
+    } else {
+      store.setDevMode(false)
+    }
+  }
+
+  const confirmDevMode = () => {
+    store.setDevMode(true)
+    setShowDevWarning(false)
+  }
 
   const renderContent = () => {
     switch (activeNav) {
@@ -163,16 +182,28 @@ export function SettingsPage() {
               <div>Chromium 126.0.6478.127</div>
               <div>Node.js 20.18.0</div>
             </div>
-            <div style={{fontSize:'11px',color:'var(--ho-text-tertiary)',marginTop:'24px'}}>(C) 2024 二维工坊 保留所有权利</div>
+            <div style={{ width:'100%', height:1, backgroundColor:'var(--ho-border)', margin:'16px 0' }} />
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', width:'100%', padding:'4px 0' }}>
+              <div style={{ textAlign:'left' }}>
+                <div style={{ fontSize:12, color:'var(--ho-text-primary)' }}>开发者模式</div>
+                <div style={{ fontSize:10, color:'var(--ho-text-tertiary)' }}>启用后将在设置中显示开发工具面板</div>
+              </div>
+              <Toggle checked={store.devMode} onChange={handleDevToggle} />
+            </div>
+            <div style={{fontSize:'11px',color:'var(--ho-text-tertiary)',marginTop:'16px'}}>(C) 2024 二维工坊 保留所有权利</div>
           </div>
         )
+
+      case '开发':
+        return <DevPanel />
+
     }
   }
 
   return (
     <div style={{flex:1,display:'flex',overflow:'hidden'}}>
       <div style={{width:'200px',borderRight:'1px solid var(--ho-border)',backgroundColor:'var(--ho-bg-secondary)',padding:'8px 0',flexShrink:0}}>
-        {NAV_ITEMS.map(item => (
+        {navItems.map(item => (
           <div key={item} onClick={()=>setActiveNav(item)} style={{
             padding:'8px 16px',cursor:'pointer',fontSize:'12px',display:'flex',alignItems:'center',gap:'8px',
             color: activeNav===item ? 'var(--ho-accent)' : 'var(--ho-text-secondary)',
@@ -185,6 +216,27 @@ export function SettingsPage() {
         <h2 style={{fontFamily:'var(--ho-font-family-title)',fontSize:'18px',color:'var(--ho-text-primary)',marginBottom:'20px',fontWeight:600}}>{activeNav}</h2>
         {renderContent()}
       </div>
+      {showDevWarning && (
+        <div style={{ position:'fixed', inset:0, backgroundColor:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:100 }}>
+          <Panel style={{ maxWidth:420, width:'100%', padding:24 }}>
+            <div style={{ fontSize:16, fontFamily:'var(--ho-font-family-title)', color:'var(--ho-warning)', marginBottom:12, fontWeight:600 }}>⚠ 开发者模式</div>
+            <div style={{ fontSize:12, color:'var(--ho-text-secondary)', lineHeight:1.8, marginBottom:16 }}>
+              开启开发者模式将暴露调试工具和底层系统接口。<br />
+              此模式仅推荐给开发者和高级用户使用。<br /><br />
+              开启后你将可以访问:
+              <ul style={{ margin:'8px 0', paddingLeft:20 }}>
+                <li>终端控制台 (支持基础命令)</li>
+                <li>IPC 通信日志监视器</li>
+                <li>系统信息面板</li>
+              </ul>
+            </div>
+            <div style={{ display:'flex', gap:8, justifyContent:'flex-end' }}>
+              <Button variant="default" onClick={() => setShowDevWarning(false)}>取消</Button>
+              <Button variant="primary" onClick={confirmDevMode}>我已了解，开启</Button>
+            </div>
+          </Panel>
+        </div>
+      )}
     </div>
   )
 }
