@@ -58,8 +58,8 @@ export function SettingsPage() {
               <Row label="预览帧率"><select style={{height:'28px',backgroundColor:'var(--ho-bg-tertiary)',border:'1px solid var(--ho-border)',borderRadius:'4px',color:'var(--ho-text-secondary)',fontSize:'12px',padding:'0 8px',outline:'none',flex:1}}><option>15</option><option>24</option><option>30</option><option>60</option></select></Row>
             </Section>
             <Section title="内存">
-              <Row label="内存限制"><div style={{display:'flex',alignItems:'center',gap:'8px',flex:1}}><input type="range" min={2} max={64} defaultValue={8} style={{flex:1,height:'3px',accentColor:'var(--ho-accent)'}} /><span style={{fontSize:'11px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',width:'30px',textAlign:'right'}}>8 GB</span></div></Row>
-              <Row label="缓存大小"><div style={{display:'flex',alignItems:'center',gap:'8px',flex:1}}><input type="range" min={1} max={200} defaultValue={20} style={{flex:1,height:'3px',accentColor:'var(--ho-accent)'}} /><span style={{fontSize:'11px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',width:'36px',textAlign:'right'}}>20 GB</span><Button variant="ghost" style={{fontSize:'10px'}}>清除</Button></div></Row>
+              <Row label="内存限制"><div style={{display:'flex',alignItems:'center',gap:'8px',flex:1}}><Slider value={8} min={2} max={64} step={1} onChange={()=>{}} style={{flex:1}} /><span style={{fontSize:'11px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',width:'30px',textAlign:'right'}}>8 GB</span></div></Row>
+              <Row label="缓存大小"><div style={{display:'flex',alignItems:'center',gap:'8px',flex:1}}><Slider value={20} min={1} max={200} step={1} onChange={()=>{}} style={{flex:1}} /><span style={{fontSize:'11px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',width:'36px',textAlign:'right'}}>20 GB</span><Button variant="ghost" style={{fontSize:'10px'}}>清除</Button></div></Row>
             </Section>
           </div>
         )

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { Input } from '../ui/Input'
 import { Icon } from '../ui/Icon'
 import { useTimelineStore } from '../../stores/timelineStore'
-import { useDragDrop } from '../../hooks/useDragDrop'
 
 const TRACK_COLORS: Record<string,string> = { V1:'var(--ho-track-v1)', V2:'var(--ho-track-v2)', V3:'var(--ho-track-v3)', A1:'var(--ho-track-a1)', A2:'var(--ho-track-a2)' }
 const TRACK_KEYS = ['V1','V2','V3','A1','A2']
@@ -10,11 +9,10 @@ const TOTAL = 30
 const LEFT_W = 299
 
 export function EditorPanel() {
-  const { currentTime, playing, selectedClipId, tracks, setCurrentTime, setPlaying, selectClip, setTracks } = useTimelineStore()
+  const { currentTime, playing, selectedClipId, tracks, setCurrentTime, setPlaying, selectClip, setTracks, addClip, removeClip } = useTimelineStore()
   const [propsTab, setPropsTab] = useState<'metadata'|'properties'>('metadata')
   const [zoom, setZoom] = useState(60)
   const [snap, setSnap] = useState(true)
-  const { onDrop, onDragOver } = useDragDrop()
 
   useEffect(() => {
     if (tracks.length > 0) return
@@ -30,6 +28,17 @@ export function EditorPanel() {
       { id:'t5', name:'A2', type:'audio' as const, muted:false, locked:false, clips:[] }
     ])
   }, [tracks, setTracks])
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedClipId) {
+        removeClip(selectedClipId)
+        selectClip(null)
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [selectedClipId, removeClip, selectClip])
 
   useEffect(() => {
     if (!playing) return
@@ -64,6 +73,21 @@ export function EditorPanel() {
       <div style={{ width:LEFT_W, flexShrink:0, display:'flex', flexDirection:'column', borderRight:'1px solid var(--ho-border)', backgroundColor:'var(--ho-bg-secondary)' }}>
         <div style={{ flex:1, overflow:'auto', padding:16, borderBottom:'1px solid var(--ho-border)' }}>
           <Input placeholder="搜索素材..." style={{ fontSize:11, height:30, backgroundColor:'var(--ho-bg-tertiary)', border:'1px solid var(--ho-border)', borderRadius:6, color:'var(--ho-text-primary)', padding:'0 8px', outline:'none' }} />
+          <div style={{ marginTop:12, display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+            {[
+              { n:'城市航拍.mp4', d:15 },{ n:'日落延时.mp4', d:8 },
+              { n:'公园全景.mp4', d:12 },{ n:'夜景灯光.mp4', d:20 }
+            ].map(m => (
+              <div key={m.n} draggable onDragStart={e => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({ name:m.n, duration:m.d, type:'video' }))
+              }} style={{ cursor:'grab' }}>
+                <div style={{ aspectRatio:'16/9', backgroundColor:'var(--ho-bg-tertiary)', borderRadius:4, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:4 }}>
+                  <span style={{ fontSize:10, color:'var(--ho-text-tertiary)' }}>{m.d}s</span>
+                </div>
+                <div style={{ fontSize:10, color:'var(--ho-text-primary)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{m.n}</div>
+              </div>
+            ))}
+          </div>
         </div>
         <div style={{ flex:1, overflow:'auto', padding:16 }}>
           <div style={{ fontSize:11, color:'var(--ho-text-tertiary)', marginBottom:12, textTransform:'uppercase', letterSpacing:1 }}>字幕 / 特效</div>
@@ -175,7 +199,23 @@ export function EditorPanel() {
               </div>
             </div>
             {/* 轨道 + 片段 */}
-            <div style={{ flex:1, position:'relative', overflow:'auto', cursor:'pointer' }} onClick={handleTimelineClick} onDrop={onDrop(d=>console.log(d))} onDragOver={onDragOver}>
+            <div style={{ flex:1, position:'relative', overflow:'auto', cursor:'pointer' }} onClick={handleTimelineClick} onDrop={e => {
+              e.preventDefault()
+              try {
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'))
+                const rect = e.currentTarget.getBoundingClientRect()
+                const dropTime = ((e.clientX - rect.left) / rect.width) * TOTAL
+                const trackKeys = ['V1','V2','V3','A1','A2']
+                const strip = document.querySelector('[data-track]')
+                const trackRow = Math.floor((e.clientY - rect.top) / 40)
+                const trackName = trackKeys[Math.min(trackRow, trackKeys.length-1)]
+                const track = tracks.find(t => t.name === trackName)
+                if (data && track) {
+                  const now = Date.now()
+                  addClip(track.id, { id:`c${now}`, name:data.name, filePath:'', duration:data.duration||5, start:dropTime, trackId:track.id, width:1920, height:1080, fps:30, codec:'H264' as any, colorSpace:'Rec709' as any, colorDepth:8 as any, chromaSubsampling:'YUV420' as any })
+                }
+              } catch {}
+            }} onDragOver={e => e.preventDefault()}>
               {TRACK_KEYS.map((_,i) => (
                 <div key={i} style={{ height:40, borderBottom:'1px solid var(--ho-border)' }} />
               ))}

@@ -33,7 +33,20 @@ export function ProjectView() {
     'ctrl-shift-z': () => console.log('redo'),
     'ctrl-[': () => navigate('/'),
     'ctrl-tab': () => switchTab(1),
-    'ctrl-shift-tab': () => switchTab(-1)
+    'ctrl-shift-tab': () => switchTab(-1),
+    'Space': () => {
+      const event = new KeyboardEvent('keydown', { code:'Space', key:' ' })
+      window.dispatchEvent(event)
+    },
+    'b': () => { const el = document.querySelector('[data-tab="creative"]') as HTMLElement; el?.click() },
+    'e': () => console.log('eraser'),
+    'v': () => console.log('move tool'),
+    'i': () => console.log('mark in'),
+    'o': () => console.log('mark out'),
+    'delete': () => console.log('delete'),
+    'backspace': () => console.log('delete'),
+    'arrowleft': () => console.log('prev frame'),
+    'arrowright': () => console.log('next frame')
   })
 
   const renderTabContent = () => {

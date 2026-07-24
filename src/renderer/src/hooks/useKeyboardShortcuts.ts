@@ -4,34 +4,27 @@ interface ShortcutMap {
   [key: string]: () => void
 }
 
-const SHORTCUTS: Record<string, string> = {
-  's': 'save', 'z': 'undo', 'shift-z': 'redo',
-  'delete': 'delete', 'backspace': 'delete',
-  'I': 'mark-in', 'O': 'mark-out',
-  ' ': 'play-pause', 'ArrowLeft': 'prev-frame', 'ArrowRight': 'next-frame',
-  'Home': 'go-start', 'End': 'go-end',
-  'b': 'tool-brush', 'e': 'tool-eraser', 'v': 'tool-move',
-  'p': 'tool-pen', 'm': 'tool-select', 't': 'tool-text',
-  'n': 'tool-pencil', 'a': 'tool-picker',
-  'N': 'toggle-snap'
-}
-
 export function useKeyboardShortcuts(handlers: ShortcutMap): void {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isInput = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement
+      const target = e.target as HTMLElement
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT'
       if (isInput && e.key !== 'Escape' && e.key !== 'Enter') return
 
-      const key = e.shiftKey ? `shift-${e.key.toLowerCase()}` : e.ctrlKey ? `ctrl-${e.key.toLowerCase()}` : e.key
-      const handler = handlers[key]
+      const mod = e.ctrlKey || e.metaKey ? 'ctrl-' : ''
+      const shift = e.shiftKey ? 'shift-' : ''
+      const key = e.key === ' ' ? 'Space' : e.key
+      const combo = `${mod}${shift}${key.toLowerCase()}`
+      const handler = handlers[combo]
 
       if (handler) {
         e.preventDefault()
+        e.stopPropagation()
         handler()
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [handlers])
 }
