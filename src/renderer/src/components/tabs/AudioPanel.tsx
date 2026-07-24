@@ -1,7 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { Button } from '../ui/Button'
 import { Icon } from '../ui/Icon'
+import { Toggle } from '../ui/Toggle'
 import { useAudioStore } from '../../stores/audioStore'
+import { useTimelineStore } from '../../stores/timelineStore'
 
 const EFFECTS_LIBRARY = [
   { name:'降噪',desc:'去除背景噪声' },{ name:'去齿音',desc:'消除齿音嘶声' },
@@ -19,6 +21,7 @@ export function AudioPanel() {
     setActiveTab, setTrackVolume, toggleMute, toggleSolo, setMasterVolume,
     setMonitorVolume, setLoudnessStandard, addEffect, removeEffect, toggleBypass
   } = useAudioStore()
+  const { currentTime } = useTimelineStore()
 
   const [eqBands, setEqBands] = useState([0,0,0,0,0,0,0,0])
   const [compThreshold, setCompThreshold] = useState(-20)
@@ -27,6 +30,24 @@ export function AudioPanel() {
   const [reverbDecay, setReverbDecay] = useState(2)
   const [fftSize, setFftSize] = useState('2048')
   const [windowFn, setWindowFn] = useState('Hann')
+  const spectrumRef = useRef<HTMLDivElement>(null)
+  const [specAnimated, setSpecAnimated] = useState(false)
+
+  useEffect(() => {
+    if (!spectrumRef.current || specAnimated) return
+    setSpecAnimated(true)
+    const bars = spectrumRef.current.querySelectorAll<HTMLElement>('.spec-bar')
+    let frame = 0
+    const animate = () => {
+      frame++
+      bars.forEach((bar, i) => {
+        bar.style.height = `${20 + Math.sin(frame * 0.05 + i * 0.8) * 25 + Math.random() * 15}%`
+      })
+      requestAnimationFrame(animate)
+    }
+    const id = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(id)
+  }, [specAnimated])
 
   const handleExportAudio = async () => {
     const api = (window as any).electronAPI
@@ -48,7 +69,9 @@ export function AudioPanel() {
         <Button variant="icon" style={{fontSize:'10px'}}>.</Button>
         <div style={{flex:1,display:'flex',justifyContent:'center',alignItems:'center',gap:'8px'}}>
           <Button variant="icon" style={{fontSize:'12px'}}><Icon name="play" size={14} color="var(--ho-text-secondary)" /></Button>
-          <span style={{fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',fontSize:'12px',letterSpacing:'1px'}}>00:00:15:12</span>
+          <span style={{fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',fontSize:'12px',letterSpacing:'1px'}}>
+            {String(Math.floor(currentTime/60)).padStart(2,'0')}:{String(Math.floor(currentTime%60)).padStart(2,'0')}:{String(Math.floor(currentTime*30%30)).padStart(2,'0')}
+          </span>
         </div>
         <select style={{height:'22px',backgroundColor:'var(--ho-bg-tertiary)',border:'1px solid var(--ho-border)',borderRadius:'4px',color:'var(--ho-text-secondary)',fontSize:'10px',padding:'0 6px',outline:'none'}}><option>立体声</option><option>单声道</option></select>
         <Button variant="primary" style={{fontSize:'10px',height:'28px'}} onClick={handleExportAudio}>导出音频</Button>
@@ -92,7 +115,7 @@ export function AudioPanel() {
                     <input type="range" min={-60} max={12} value={t.volume} onChange={e=>setTrackVolume(t.id,Number(e.target.value))} style={{width:'40px',height:'3px',transform:'rotate(-90deg)',accentColor:'var(--ho-accent)'}} />
                   </div>
                 ))}
-                <div style={{position:'absolute',left:'15%',top:0,bottom:0,width:'2px',backgroundColor:'var(--ho-accent)',zIndex:10}}>
+                <div style={{position:'absolute',left:`${(currentTime % 30 / 30) * 100}%`,top:0,bottom:0,width:'2px',backgroundColor:'var(--ho-accent)',zIndex:10}}>
                   <div style={{width:'8px',height:'8px',backgroundColor:'var(--ho-accent)',clipPath:'polygon(50% 0%, 0% 100%, 100% 100%)',margin:'0 auto'}} />
                 </div>
               </div>
@@ -114,9 +137,13 @@ export function AudioPanel() {
           <div style={{flex:1,overflow:'auto',padding:'12px'}}>
             {activeTab==='spectrum' && (
               <div>
-                <div key={String(Date.now())} style={{height:'120px',display:'flex',alignItems:'flex-end',gap:'3px',marginBottom:'8px'}}>
+                <div ref={spectrumRef} style={{height:'120px',display:'flex',alignItems:'flex-end',gap:'3px',marginBottom:'8px'}}>
                   {Array.from({length:20}).map((_,i) => (
-                    <div key={i} style={{flex:1,height:`${20+Math.sin(i*1.2)*35+25}%`,background:'linear-gradient(to top, rgba(122,158,196,0.15), rgba(122,158,196,0.5))',borderRadius:'2px 2px 0 0',transition:'height 0.1s'}} />
+                    <div key={i} className="spec-bar" style={{
+                      flex:1, height:'40%',
+                      background:'linear-gradient(to top, rgba(122,158,196,0.15), rgba(122,158,196,0.5))',
+                      borderRadius:'2px 2px 0 0', transition:'height 0.05s'
+                    }} />
                   ))}
                 </div>
                 <div style={{display:'flex',justifyContent:'space-between',fontSize:'8px',color:'var(--ho-text-tertiary)',marginBottom:'10px'}}>

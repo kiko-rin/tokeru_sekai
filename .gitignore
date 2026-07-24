@@ -7,4 +7,3 @@ dist-electron/
 *.log
 .DS_Store
 Thumbs.db
-.kilo/
