@@ -1,6 +1,6 @@
 {
   "name": "tokeru-sekai",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha1",
   "description": "二维工坊 — 融合媒体制作软件",
   "main": "out/main/index.js",
   "author": "",
