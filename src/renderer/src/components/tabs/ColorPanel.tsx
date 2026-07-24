@@ -228,7 +228,7 @@ export function ColorPanel() {
                   <input type="range" min={0} max={100} value={lutOpacity} onChange={e=>setLutOpacity(Number(e.target.value))} style={{ flex:1, height:4, accentColor:'var(--ho-accent)' }} />
                   <span style={{ fontSize:10, fontFamily:'var(--ho-font-family-mono)', color:'var(--ho-accent)', width:24, textAlign:'right' }}>{lutOpacity}</span>
                 </div>
-                <Button variant="default" style={{ width:'100%', fontSize:11 }} onClick={handleLutImport}>+ 导入自定义LUT</Button>
+                <Button variant="default" style={{ width:'100%', fontSize:11 }} onClick={handleLutImport}><Icon name="plus" size={12} /> 导入自定义LUT</Button>
                 {activeLUT && <div style={{ marginTop:8, fontSize:10, color:'var(--ho-accent)', textAlign:'center' }}>已加载: {activeLUT.name}</div>}
               </div>
             )}

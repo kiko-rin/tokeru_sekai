@@ -24,7 +24,7 @@ export function PuppetControls({ playing, onPlayToggle }: PuppetControlsProps) {
       <span style={{ fontSize:'8px',color:'var(--ho-text-tertiary)' }}>速度</span>
       <input type="range" min={10} max={200} value={speed*100} onChange={e=>setSpeed(Number(e.target.value)/100)} style={{ width:'40px',height:'3px' }} />
       <span style={{ fontSize:'8px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)' }}>{speed}x</span>
-      <Button variant="icon" onClick={()=>setLooping(!looping)} style={{ fontSize:'9px',color:looping?'var(--ho-accent)':'var(--ho-text-tertiary)' }}>R</Button>
+      <Button variant="icon" onClick={()=>setLooping(!looping)} style={{ fontSize:'9px' }}><Icon name="refresh" size={12} color={looping?'var(--ho-accent)':'var(--ho-text-tertiary)'} /></Button>
     </div>
   )
 }

@@ -119,7 +119,8 @@ export function OutlinePanel() {
                 style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 16px', cursor: 'pointer', fontSize: 12, color: 'var(--ho-text-secondary)', borderRadius: 0 }}
               >
                 <Icon name="chevron-right" size={10} color="var(--ho-text-tertiary)" style={{ transition: 'transform 120ms', transform: scene.expanded ? 'rotate(90deg)' : '' }} />
-                <span style={{ fontSize: 12 }}>{'[ '}{scene.name}</span>
+                <Icon name="folder" size={12} color="var(--ho-text-tertiary)" />
+                <span style={{ fontSize: 12 }}>{scene.name}</span>
               </div>
               {scene.expanded && scene.shots.map((shot) => (
                 <div
@@ -135,7 +136,7 @@ export function OutlinePanel() {
                     display: 'flex', alignItems: 'center', gap: 4
                   }}
                 >
-                  <span>{'>'}</span><span>{shot.name}</span>
+                  <Icon name="chevron-right" size={10} color="var(--ho-text-tertiary)" /><span>{shot.name}</span>
                 </div>
               ))}
             </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Input } from '../ui/Input'
+import { Icon } from '../ui/Icon'
 import { useTimelineStore } from '../../stores/timelineStore'
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts'
 
@@ -157,19 +158,19 @@ export function EditorPanel() {
           {/* 磁吸 x:31 — 从左侧 24px padding + 7px offset */}
           <span style={{ fontSize:11, cursor:'pointer', color:snap?'var(--ho-accent)':'var(--ho-text-tertiary)', padding:'3px 6px', borderRadius:4, backgroundColor:snap?'rgba(122,158,196,0.1)':'transparent' }} onClick={()=>setSnap(!snap)}>磁吸</span>
           {/* 切刀 x:67 — offset */}
-          <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-text-tertiary)', padding:'3px 6px' }} onClick={()=>console.log('razor')}>切刀</span>
+          <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-text-tertiary)', padding:'3px 6px' }} onClick={()=>console.log('razor')}><Icon name="razor" size={14} /></span>
           <div style={{ flex:1 }} />
           {/* 跳到开始 */}
-          <span style={{ fontSize:12, cursor:'pointer', color:'var(--ho-text-secondary)', padding:4 }} onClick={()=>seek(-TOTAL)}>{'|<'}</span>
-          <span style={{ fontSize:12, cursor:'pointer', color:'var(--ho-text-secondary)', padding:4 }} onClick={()=>seek(-1/30)}>{'<<'}</span>
+          <Icon name="prev" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(-TOTAL)} />
+          <Icon name="prev-frame" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(-1/30)} />
           {/* 暂停or继续 x:420 */}
-          <span style={{ fontSize:14, cursor:'pointer', color:'#fff', width:18, height:18, backgroundColor:'var(--ho-accent)', borderRadius:3, display:'inline-flex', alignItems:'center', justifyContent:'center' }} onClick={()=>setPlaying(!playing)}>{playing?'||':'>'}</span>
-          <span style={{ fontSize:12, cursor:'pointer', color:'var(--ho-text-secondary)', padding:4 }} onClick={()=>seek(1/30)}>{'>>'}</span>
-          <span style={{ fontSize:12, cursor:'pointer', color:'var(--ho-text-secondary)', padding:4 }} onClick={()=>seek(TOTAL)}>{'>|'}</span>
+          <span style={{ fontSize:14, cursor:'pointer', color:'#fff', width:18, height:18, backgroundColor:'var(--ho-accent)', borderRadius:3, display:'inline-flex', alignItems:'center', justifyContent:'center' }} onClick={()=>setPlaying(!playing)}><Icon name={playing?'pause':'play'} size={12} color="#fff" /></span>
+          <Icon name="next-frame" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(1/30)} />
+          <Icon name="next" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(TOTAL)} />
           {/* 旗标按钮组 x:515-571 */}
-          <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-accent)', padding:4 }} onClick={()=>setInPoint(currentTime)}>I</span>
-          <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-accent)', padding:4 }} onClick={()=>{ setInPoint(0); setOutPoint(TOTAL) }}>x</span>
-          <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-accent)', padding:4 }} onClick={()=>setOutPoint(currentTime)}>O</span>
+          <Icon name="flag" size={14} color="var(--ho-accent)" style={{cursor:'pointer',padding:4}} onClick={()=>setInPoint(currentTime)} />
+          <Icon name="close-small" size={14} color="var(--ho-text-tertiary)" style={{cursor:'pointer',padding:4}} onClick={()=>{ setInPoint(0); setOutPoint(TOTAL) }} />
+          <Icon name="flag" size={14} color="var(--ho-accent)" style={{cursor:'pointer',padding:4}} onClick={()=>setOutPoint(currentTime)} />
           {/* 时间线缩放滑条 x:714, w:181 (spec) */}
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <svg width={120} height={14} viewBox="0 0 120 14" style={{ cursor:'pointer' }} onClick={e=>{const r=e.currentTarget.getBoundingClientRect(); setZoom(Math.round(Math.max(10,Math.min(200,((e.clientX-r.left)/r.width)*200)))) }}>
@@ -191,8 +192,8 @@ export function EditorPanel() {
               <div key={k} style={{ height:36, borderBottom:'1px solid var(--ho-border)', display:'flex', alignItems:'center', gap:3, padding:'0 6px' }}>
                 <div style={{ width:4, height:18, backgroundColor:TC[k], borderRadius:2, flexShrink:0 }} />
                 <span style={{ fontSize:10, color:'var(--ho-text-secondary)', flex:1 }}>{k}</span>
-                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>addTrack({ id:`t${Date.now()}`,name:`V${tracks.length+1}`,type:'video',muted:false,locked:false,clips:[] })}>+</span>
-                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>i>0&&removeTrack(tracks[i]?.id)}>o</span>
+                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>addTrack({ id:`t${Date.now()}`,name:`V${tracks.length+1}`,type:'video',muted:false,locked:false,clips:[] })}><Icon name="plus" size={10} /></span>
+                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>i>0&&removeTrack(tracks[i]?.id)}><Icon name="minus" size={10} /></span>
               </div>
             ))}
           </div>

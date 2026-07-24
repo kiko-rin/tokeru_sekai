@@ -1,11 +1,12 @@
 import { Button } from '../../ui/Button'
+import { Icon } from '../../ui/Icon'
 
-const TOOLS = [
-  ['画笔','b'],['铅笔','n'],['喷枪','a'],['橡皮擦','e'],
-  ['填充','g'],['渐变','d'],['模糊','r'],['锐化','s'],
-  ['矩形选区','m'],['移动','v'],['缩放','z'],['吸管','i'],
-  ['文字','t'],['形状','u'],['钢笔','p'],['裁剪','c']
-]
+const TOOL_ICONS: Record<string, string> = {
+  '画笔':'brush','铅笔':'pencil','喷枪':'brush','橡皮擦':'eraser',
+  '填充':'fill','渐变':'gradient','模糊':'brush','锐化':'brush',
+  '矩形选区':'pen','移动':'move','缩放':'zoom','吸管':'user',
+  '文字':'text','形状':'pen','钢笔':'pen','裁剪':'cut'
+}
 
 import type { ToolType } from '../../../stores/creativeStore'
 
@@ -17,7 +18,7 @@ interface ToolBarProps {
 export function ToolBar({ activeTool, onToolChange }: ToolBarProps) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '4px', marginBottom: '16px' }}>
-      {TOOLS.map(([name]) => (
+      {Object.keys(TOOL_ICONS).map((name) => (
         <button
           key={name}
           onClick={() => onToolChange(name as any)}
@@ -30,7 +31,7 @@ export function ToolBar({ activeTool, onToolChange }: ToolBarProps) {
             cursor: 'pointer'
           }}
         >
-          <span style={{ fontSize: '12px' }}>/</span>
+          <Icon name={TOOL_ICONS[name] as any} size={14} color="var(--ho-text-secondary)" />
           <span style={{ fontSize: '8px', color: 'var(--ho-text-tertiary)' }}>{name === '画笔' ? 'b' : name === '橡皮擦' ? 'e' : name === '缩放' ? 'z' : '/'}</span>
         </button>
       ))}

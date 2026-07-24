@@ -4,6 +4,7 @@ import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
 import { Slider } from '../ui/Slider'
 import { Toggle } from '../ui/Toggle'
+import { Icon } from '../ui/Icon'
 import { useSettingsStore } from '../../stores/settingsStore'
 
 const NAV_ITEMS = ['常规','性能','色彩管理','快捷键','存储','插件','关于']
@@ -108,7 +109,7 @@ export function SettingsPage() {
                   <span style={{flex:1,color:'var(--ho-text-secondary)'}}>{s.action}</span>
                   <span style={{width:'120px',fontFamily:'var(--ho-font-family-mono)',fontSize:'10px',color:'var(--ho-accent)'}}>{s.key}</span>
                   <div style={{width:'50px',textAlign:'center'}}>
-                    <Button variant="icon" style={{fontSize:'9px',width:'22px',height:'22px'}}>E</Button>
+                    <Button variant="icon" style={{width:'22px',height:'22px'}}><Icon name="pen" size={12} color="var(--ho-text-secondary)" /></Button>
                   </div>
                 </div>
               ))}

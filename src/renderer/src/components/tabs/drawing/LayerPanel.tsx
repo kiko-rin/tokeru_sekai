@@ -45,7 +45,7 @@ export function LayerPanel({ activeLayerId, onLayerSelect }: LayerPanelProps) {
           <input type="range" min={0} max={100} value={opacity} style={{ flex:1, height:3, accentColor:'var(--ho-accent)' }} />
           <span style={{ fontSize:8, fontFamily:'var(--ho-font-family-mono)', color:'var(--ho-accent)', width:20, textAlign:'right' }}>{opacity}</span>
         </div>
-        <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', display:'flex', alignItems:'center', gap:4, cursor:'pointer' }}>M 蒙版</span>
+        <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', display:'flex', alignItems:'center', gap:4, cursor:'pointer' }}>蒙版</span>
       </div>
     </>
   )

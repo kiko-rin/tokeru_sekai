@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { Button } from '../ui/Button'
 import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
+import { Icon } from '../ui/Icon'
 
 const BUILTIN_PRESETS = [
   { name:'YouTube 1080p', codec:'H.264', container:'MP4', res:'1920x1080', fps:30, bitrate:15 },
@@ -97,7 +98,7 @@ export function PublishPanel() {
         <Panel style={{padding:0,overflow:'hidden'}}>
           <div style={{aspectRatio:'16/9',backgroundColor:'#000',display:'flex',alignItems:'center',justifyContent:'center'}}>
             <div style={{width:'48px',height:'48px',borderRadius:'50%',backgroundColor:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>
-              <span style={{color:'rgba(255,255,255,0.6)',fontSize:'18px'}}>{'>'}</span>
+              <Icon name="play" size={18} color="rgba(255,255,255,0.6)" />
             </div>
           </div>
           <div style={{padding:'6px 16px',fontSize:'10px',color:'var(--ho-text-tertiary)',textAlign:'right'}}>

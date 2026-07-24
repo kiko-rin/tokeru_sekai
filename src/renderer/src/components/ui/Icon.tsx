@@ -6,7 +6,7 @@ export type IconName =
   | 'close' | 'minimize' | 'maximize' | 'restore'
   | 'prev' | 'prev-frame' | 'play' | 'pause' | 'next' | 'next-frame'
   | 'record'
-  | 'undo' | 'redo' | 'save' | 'export' | 'screenshot'
+  | 'undo' | 'redo' | 'refresh' | 'save' | 'export' | 'screenshot'
   | 'magnet' | 'cut' | 'razor'
   | 'move' | 'zoom' | 'zoom-in' | 'zoom-out'
   | 'text' | 'pen'
@@ -35,6 +35,7 @@ const IconMap: Record<string, React.ComponentType<IIconProps>> = {
   save: Icons.Save,
   undo: Icons.Undo,
   redo: Icons.Redo,
+  refresh: Icons.Refresh,
   export: Icons.Export,
   screenshot: Icons.ScreenshotOne,
   settings: Icons.Setting,

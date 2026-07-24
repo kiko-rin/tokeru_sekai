@@ -1,10 +1,11 @@
 import { Button } from '../../ui/Button'
+import { Icon } from '../../ui/Icon'
 
 export function SpineSetupGuide() {
   return (
     <div style={{ padding:'20px', display:'flex', flexDirection:'column', alignItems:'center', gap:'16px', textAlign:'center' }}>
       <div style={{ width:'60px', height:'60px', backgroundColor:'rgba(255,255,255,0.04)', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center' }}>
-        <span style={{ fontSize:'20px', color:'var(--ho-text-tertiary)' }}>?</span>
+        <Icon name="help" size={20} color="var(--ho-text-tertiary)" />
       </div>
       <div style={{ fontSize:'var(--ho-font-size-md)', color:'var(--ho-text-primary)', fontFamily:'var(--ho-font-family-title)' }}>Spine 运行时未加载</div>
       <div style={{ fontSize:'10px', color:'var(--ho-text-tertiary)', lineHeight:1.8, maxWidth:'280px' }}>

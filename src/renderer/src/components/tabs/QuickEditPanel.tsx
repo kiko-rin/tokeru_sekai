@@ -104,7 +104,7 @@ export function QuickEditPanel() {
               style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', cursor: 'grab', borderBottom: '1px solid var(--ho-border)' }}
             >
               <div style={{ width: 48, height: 28, backgroundColor: '#2a2a2a', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ fontSize: 10, color: 'var(--ho-text-tertiary)' }}>#</span>
+                <Icon name="file" size={14} color="var(--ho-text-tertiary)" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 11, color: 'var(--ho-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { SideNav } from '../components/layout/SideNav'
 import { Button } from '../components/ui/Button'
 import { Panel } from '../components/ui/Panel'
+import { Icon } from '../components/ui/Icon'
 import { Tag } from '../components/ui/Tag'
 import { Input } from '../components/ui/Input'
 import { NewProjectDialog } from '../components/tabs/NewProjectDialog'
@@ -171,7 +172,7 @@ export function ProjectManager() {
             flexShrink: 0
           }}>
             <Button variant="primary" onClick={() => setShowDialog(true)}>
-              <span>+</span>
+              <Icon name="plus" size={14} style={{ marginRight:4 }} />
               新建项目
             </Button>
             <div style={{
@@ -226,15 +227,12 @@ export function ProjectManager() {
                 fontSize: '18px',
                 color: 'var(--ho-text-tertiary)'
               }}>
-                [#]
+                <Icon name={stat.label === '进行中' ? 'time' : stat.label === '已完成' ? 'check' : stat.label === '全部项目' ? 'folder' : 'folder'} size={18} color="var(--ho-text-tertiary)" />
               </span>
             </Panel>
           ))}
         </div>
-
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 20px',
           borderBottom: '1px solid var(--ho-border)',
@@ -263,7 +261,7 @@ export function ProjectManager() {
                 }}
                 onClick={() => setViewMode('grid')}
               >
-                [#]
+                <Icon name="list" size={14} color={viewMode === 'grid' ? 'var(--ho-text-primary)' : 'var(--ho-text-tertiary)'} />
               </button>
               <button
                 style={{
@@ -281,7 +279,7 @@ export function ProjectManager() {
                 }}
                 onClick={() => setViewMode('list')}
               >
-                [=]
+                <Icon name="list" size={14} color={viewMode === 'list' ? 'var(--ho-text-primary)' : 'var(--ho-text-tertiary)'} />
               </button>
             </div>
 
