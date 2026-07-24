@@ -184,23 +184,33 @@ export function EditorPanel() {
 
         {/* ROW 3: 时间线(1012px spec) + 音频响度(130px spec) */}
         <div style={{ flex:1, display:'flex', overflow:'hidden' }}>
-          <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
-            {/* 时码刻度 32px (spec) + 轨道控制台 80px (spec) */}
-            <div style={{ display:'flex', height:32, flexShrink:0, borderBottom:'1px solid var(--ho-border)' }}>
-              <div style={{ width:80, flexShrink:0, borderRight:'1px solid var(--ho-border)', backgroundColor:'var(--ho-bg-secondary)' }} />
-              <div style={{ flex:1, position:'relative', overflow:'hidden', backgroundColor:'var(--ho-bg-primary)' }}>
-                {Array.from({length:TOTAL+1}).map((_,s) => (
-                  <div key={s} style={{ position:'absolute', left:`${(s/TOTAL)*100*zoom/60}%`, top:0, bottom:0, borderLeft:s%5===0?'1px solid rgba(255,255,255,0.15)':'1px solid var(--ho-border)' }}>
-                    {s%5===0 && <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', paddingLeft:3, whiteSpace:'nowrap' }}>{s}s</span>}
-                  </div>
-                ))}
-                <div style={{ position:'absolute', left:`${(inPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
-                <div style={{ position:'absolute', left:`${(outPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
-                <div style={{ position:'absolute', left:`${12*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
-                <div style={{ position:'absolute', left:`${55*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
+          {/* 轨道控制台 80px — 独立div，与时间线并排 */}
+          <div style={{ width:80, flexShrink:0, backgroundColor:'var(--ho-bg-secondary)', borderRight:'1px solid var(--ho-border)', display:'flex', flexDirection:'column' }}>
+            <div style={{ height:32, borderBottom:'1px solid var(--ho-border)', flexShrink:0 }} />
+            {TK.map((k,i) => (
+              <div key={k} style={{ height:36, borderBottom:'1px solid var(--ho-border)', display:'flex', alignItems:'center', gap:3, padding:'0 6px' }}>
+                <div style={{ width:4, height:18, backgroundColor:TC[k], borderRadius:2, flexShrink:0 }} />
+                <span style={{ fontSize:10, color:'var(--ho-text-secondary)', flex:1 }}>{k}</span>
+                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>addTrack({ id:`t${Date.now()}`,name:`V${tracks.length+1}`,type:'video',muted:false,locked:false,clips:[] })}>+</span>
+                <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>i>0&&removeTrack(tracks[i]?.id)}>o</span>
               </div>
+            ))}
+          </div>
+
+          <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
+            {/* 时码刻度 32px */}
+            <div style={{ height:32, flexShrink:0, borderBottom:'1px solid var(--ho-border)', position:'relative', backgroundColor:'var(--ho-bg-primary)' }}>
+              {Array.from({length:TOTAL+1}).map((_,s) => (
+                <div key={s} style={{ position:'absolute', left:`${(s/TOTAL)*100*zoom/60}%`, top:0, bottom:0, borderLeft:s%5===0?'1px solid rgba(255,255,255,0.15)':'1px solid var(--ho-border)' }}>
+                  {s%5===0 && <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', paddingLeft:3, whiteSpace:'nowrap' }}>{s}s</span>}
+                </div>
+              ))}
+              <div style={{ position:'absolute', left:`${(inPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
+              <div style={{ position:'absolute', left:`${(outPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
+              <div style={{ position:'absolute', left:`${12*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
+              <div style={{ position:'absolute', left:`${55*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
             </div>
-            {/* 轨道区域 */}
+            {/* 轨道内容区域 */}
             <div style={{ flex:1, position:'relative', overflow:'auto', cursor:'pointer' }} onClick={tlClick} onDrop={e=>{
               e.preventDefault()
               try {
@@ -212,17 +222,11 @@ export function EditorPanel() {
                 if (d&&t) addClip(t.id,{ id:`c${Date.now()}`,name:d.n||d.name,filePath:'',duration:d.d||5,start:dt,trackId:t.id,width:1920,height:1080,fps:30,codec:'H264' as any,colorSpace:'Rec709' as any,colorDepth:8 as any,chromaSubsampling:'YUV420' as any })
               } catch(e){}
             }} onDragOver={e=>e.preventDefault()}>
-              {TK.map((k,i) => (
-                <div key={k} style={{ height:36, borderBottom:'1px solid var(--ho-border)', display:'flex', position:'relative' }}>
-                  <div style={{ width:80, flexShrink:0, display:'flex', alignItems:'center', gap:4, padding:'0 6px', backgroundColor:'var(--ho-bg-secondary)', borderRight:'1px solid var(--ho-border)', position:'sticky', left:0, zIndex:2 }}>
-                    <div style={{ width:4, height:18, backgroundColor:TC[k], borderRadius:2, flexShrink:0 }} />
-                    <span style={{ fontSize:10, color:'var(--ho-text-secondary)', flex:1 }}>{k}</span>
-                    <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>addTrack({ id:`t${Date.now()}`,name:`V${tracks.length+1}`,type:'video',muted:false,locked:false,clips:[] })}>+</span>
-                    <span style={{ fontSize:8, color:'var(--ho-text-tertiary)', cursor:'pointer' }} onClick={()=>i>0&&removeTrack(tracks[i]?.id)}>o</span>
-                  </div>
-                  <div style={{ flex:1 }} />
-                </div>
+              {/* 空轨道行 */}
+              {TK.map((_,i) => (
+                <div key={i} style={{ height:36, borderBottom:'1px solid var(--ho-border)' }} />
               ))}
+              {/* 片段 */}
               {clipsData.map((c,i) => {
                 const idx = TK.indexOf(c.track)
                 return (
@@ -231,8 +235,7 @@ export function EditorPanel() {
                     width:px(c.dur), height:28, borderRadius:4,
                     backgroundColor:`${TC[c.track]}18`, borderLeft:`3px solid ${TC[c.track]}`,
                     border:selectedClipId===c.name?'1px solid var(--ho-accent)':'none',
-                    display:'flex', alignItems:'center', padding:'0 8px', cursor:'pointer', zIndex:1, minWidth:4,
-                    boxShadow:selectedClipId===c.name?'0 0 0 1px rgba(122,158,196,0.15)':'none'
+                    display:'flex', alignItems:'center', padding:'0 8px', cursor:'pointer', zIndex:1, minWidth:4
                   }}>
                     <span style={{ fontSize:10, color:'rgba(255,255,255,0.8)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{c.name}</span>
                   </div>
