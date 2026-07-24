@@ -34,7 +34,7 @@ export function ProjectSetupWizard({ initialName, initialType, onComplete, onCan
   const [importedCount, setImportedCount] = useState(0)
   const [imported, setImported] = useState(false)
   const [creating, setCreating] = useState(false)
-  const { importMedia, ImportDialog } = useDITImport()
+  const { importMedia, ImportDialog } = useDITImport({ projectRoot: projectPath || undefined })
   const { setProjectRoot } = useDITStore()
 
   const handleSelectDirectory = async () => {

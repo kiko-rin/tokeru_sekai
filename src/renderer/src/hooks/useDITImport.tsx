@@ -1,194 +1,139 @@
-import { useState } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { Button } from '../components/ui/Button'
 import { Panel } from '../components/ui/Panel'
 import { useDITStore, type DITFile } from '../stores/ditStore'
 
-export interface ImportResult {
-  name: string
-  path: string
-  size: number
-  hash: string
-  ditFile: DITFile
+export interface ImportResult { name: string; path: string; size: number; hash: string; ditFile: DITFile }
+
+interface State {
+  show: boolean; files: { name: string; path: string }[]; destDir: string
+  importing: boolean; progress: number; label: string
+  result: ImportResult[]; error: string | null
 }
 
-interface UseDITImportOptions {
-  projectRoot?: string
-  hashAlgorithm?: string
-}
+export function useDITImport(options?: { projectRoot?: string; hashAlgorithm?: string }) {
+  const { addProjectFile, currentProjectRoot } = useDITStore()
+  const [s, setS] = useState<State>({ show: false, files: [], destDir: '', importing: false, progress: 0, label: '', result: [], error: null })
 
-interface ConfirmState {
-  show: boolean
-  files: { name: string; path: string; size: number }[]
-  destDir: string
-  onConfirm: () => Promise<void>
-  importing: boolean
-  progress: number
-  result: ImportResult[]
-  error: string | null
-}
+  const close = () => setS(p => ({ ...p, show: false, result: [], error: null }))
 
-export function useDITImport(options?: UseDITImportOptions) {
-  const { addProjectFile, setProjectRoot, currentProjectRoot } = useDITStore()
-  const [confirm, setConfirm] = useState<ConfirmState>({
-    show: false, files: [], destDir: '', onConfirm: async () => {},
-    importing: false, progress: 0, result: [], error: null
-  })
+  const runImport = useCallback(async (files: { name: string; path: string }[], destDir: string) => {
+    const api = (window as any).electronAPI
+    if (!api) return
+    const hashAlgo = options?.hashAlgorithm || 'sha256'
+    const imported: ImportResult[] = []
+    const total = files.length
+    let hasErr = false
 
-  const isImporting = confirm.importing
-  const importProgress = confirm.progress
+    for (let i = 0; i < total; i++) {
+      const f = files[i]
+      try {
+        setS(p => ({ ...p, importing: true, progress: Math.round(i / total * 100), label: `${f.name} (${i + 1}/${total})`, error: null }))
+        // Wait a tick for React to render
+        await new Promise(r => setTimeout(r, 10))
+        const hashR = await api.dit.computeHash(f.path, hashAlgo)
+        if (!hashR.success) throw new Error(`${f.name}: 哈希失败`)
+        const dest = `${destDir}/${f.name}`
+        const copyR = await api.dit.copyFile(f.path, dest, hashAlgo)
+        if (!copyR.success) throw new Error(`${f.name}: 拷贝失败`)
+        if (hashR.hash !== copyR.destHash) throw new Error(`${f.name}: 校验不通过`)
+        const df: DITFile = { id: `pf_${Date.now()}_${Math.random().toString(36).slice(2,6)}`, name: f.name, relativePath: f.name, absolutePath: dest, size: copyR.copiedBytes || 0, type: 'video', hash: hashR.hash || '', hashAlgorithm: hashAlgo as any, status: 'available', modifiedAt: Date.now(), projectId: 'current', linkedClips: [] }
+        addProjectFile(df)
+        imported.push({ name: f.name, path: dest, size: copyR.copiedBytes || 0, hash: hashR.hash || '', ditFile: df })
+      } catch (e: any) { hasErr = true; setS(p => ({ ...p, importing: false, error: e.message || '未知错误' })); break }
+    }
+    if (!hasErr) setS(p => ({ ...p, importing: false, progress: 100, label: '完成' }))
+    return imported
+  }, [addProjectFile, options])
 
-  const closeDialog = () => setConfirm(prev => ({ ...prev, show: false, result: [], error: null }))
-
-  const importMedia = async (): Promise<ImportResult[]> => {
+  const importMedia = useCallback(async () => {
     const api = (window as any).electronAPI
     if (!api) return []
+    const paths = await api.dialog.openFile({ title: '选择导入文件', filters: [
+      {name:'媒体文件',extensions:['mp4','mov','avi','mkv','mxf','r3d','mts','m2ts','mpg','mpeg','ts','webm','wav','mp3','aac','flac','m4a','ogg','opus','wma','jpg','jpeg','png','tif','tiff','bmp','raw','cr2','nef','arw','dng','gif','webp','srt','ass','lrt','cube','3dl','csp','zip','7z']},
+      {name:'所有文件',extensions:['*']}
+    ], properties: ['openFile', 'multiSelections'] })
+    if (!paths?.length) return []
 
-    // Step 1: Open file dialog
-    const filePaths = await api.dialog.openFile({
-      title: '导入媒体文件',
-      filters: [
-        { name: '媒体文件', extensions: ['mp4','mov','avi','mkv','mxf','r3d','mts','m2ts','mpg','mpeg','ts','webm','wav','mp3','aac','flac','m4a','ogg','opus','wma','jpg','jpeg','png','tif','tiff','bmp','raw','cr2','nef','arw','dng','gif','webp','srt','ass','lrt','cube','3dl','csp','zip','7z'] },
-        { name: '视频文件', extensions: ['mp4','mov','avi','mkv','mxf','r3d','webm'] },
-        { name: '音频文件', extensions: ['wav','mp3','aac','flac','m4a','wma'] },
-        { name: '图片文件', extensions: ['jpg','jpeg','png','tif','tiff','bmp','raw','dng'] },
-        { name: 'LUT 文件', extensions: ['cube','3dl','csp'] },
-        { name: '所有文件', extensions: ['*'] }
-      ],
-      properties: ['openFile', 'multiSelections']
-    })
-    if (!filePaths || filePaths.length === 0) return []
-
-    // Step 2: Determine destination
-    const projectRoot = options?.projectRoot || currentProjectRoot
-    if (!projectRoot) {
-      const dir = await api.dialog.openDirectory({ title: '选择项目目录(文件将被拷贝至此目录)' })
-      if (!dir) return []
-      setProjectRoot(dir)
+    const destDir = options?.projectRoot || currentProjectRoot
+    if (!destDir) {
+      const d = await api.dialog.openDirectory({ title: '选择项目目录' })
+      if (!d) return []; (window as any).__ditRoot = d
     }
+    const dir = destDir || (window as any).__ditRoot || ''
+    if (!dir) return []
 
-    const destDir = projectRoot || currentProjectRoot
+    const files = paths.map((p: string) => ({ name: p.split(/[/\\]/).pop() || 'x', path: p }))
 
-    // Step 3: Show confirmation dialog
-    const fileInfos = filePaths.map((p: string) => ({
-      name: p.split(/[/\\]/).pop() || 'unknown',
-      path: p,
-      size: 0
-    }))
-
-    return new Promise<ImportResult[]>((resolve) => {
-      setConfirm({
-        show: true,
-        files: fileInfos,
-        destDir,
-        importing: false,
-        progress: 0,
-        result: [],
-        error: null,
-        onConfirm: async () => {
-          setConfirm(prev => ({ ...prev, importing: true, progress: 0, error: null }))
-
-          const imported: ImportResult[] = []
-          const hashAlgo = options?.hashAlgorithm || 'sha256'
-          let completed = 0
-
-          for (const fileInfo of fileInfos) {
-            try {
-              // Compute source hash
-              const hashResult = await api.dit.computeHash(fileInfo.path, hashAlgo)
-              if (!hashResult.success) throw new Error(`Hash failed: ${hashResult.error}`)
-
-              // Copy to project directory
-              const destPath = `${destDir}/${fileInfo.name}`
-              const copyResult = await api.dit.copyFile(fileInfo.path, destPath, hashAlgo)
-              if (!copyResult.success) throw new Error(`Copy failed: ${copyResult.error}`)
-
-              const verified = hashResult.hash === copyResult.destHash
-              if (!verified) throw new Error('Hash mismatch after copy!')
-
-              // Register in DIT store
-              const ditFile: DITFile = {
-                id: `pf_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-                name: fileInfo.name,
-                relativePath: fileInfo.name,
-                absolutePath: destPath,
-                size: fileInfo.size || 0,
-                type: detectTypeForDIT(fileInfo.name),
-                hash: hashResult.hash || '',
-                hashAlgorithm: hashAlgo as any,
-                status: 'available',
-                modifiedAt: Date.now(),
-                projectId: 'current',
-                linkedClips: []
-              }
-              addProjectFile(ditFile)
-
-              imported.push({
-                name: fileInfo.name,
-                path: destPath,
-                size: fileInfo.size || 0,
-                hash: hashResult.hash || '',
-                ditFile
-              })
-
-              completed++
-              setConfirm(prev => ({ ...prev, progress: Math.round((completed / fileInfos.length) * 100) }))
-            } catch (err: any) {
-              setConfirm(prev => ({ ...prev, error: `导入 ${fileInfo.name} 失败: ${err.message}` }))
-            }
-          }
-
-          setConfirm(prev => ({ ...prev, importing: false }))
-          resolve(imported)
-        }
-      })
+    return new Promise<ImportResult[]>(resolve => {
+      setS({ show: true, files, destDir: dir, importing: false, progress: 0, label: '', result: [], error: null })
+      // Expose resolve + start for the UI
+      ;(window as any).__ditResolve = resolve
+      ;(window as any).__ditRun = runImport
+      ;(window as any).__ditFiles = files
+      ;(window as any).__ditDir = dir
     })
-  }
+  }, [options, currentProjectRoot, runImport])
 
-  const ImportDialog = confirm.show ? (
-    <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-      <Panel style={{ maxWidth: 480, width: '100%', padding: 24 }}>
-        <h3 style={{ fontFamily: 'var(--ho-font-family-title)', fontSize: 16, color: 'var(--ho-text-primary)', marginBottom: 12, fontWeight: 600 }}>导入媒体文件</h3>
+  const startImport = useCallback(async () => {
+    const files = (window as any).__ditFiles || []
+    const dir = (window as any).__ditDir || ''
+    const res = (window as any).__ditResolve
+    const result = await runImport(files, dir)
+    res?.(result)
+  }, [runImport])
 
-        {confirm.result.length > 0 ? (
+  const ImportDialog = s.show ? (
+    <div style={{ position:'fixed', inset:0, backgroundColor:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }}>
+      <Panel style={{ maxWidth:480, width:'100%', padding:24 }}>
+        <h3 style={{ fontFamily:'var(--ho-font-family-title)', fontSize:16, color:'var(--ho-text-primary)', marginBottom:12, fontWeight:600 }}>
+          {s.importing ? '导入中...' : s.result.length > 0 ? '导入完成' : '导入媒体文件'}
+        </h3>
+
+        {!s.importing && s.result.length === 0 && !s.error && (
           <>
-            <div style={{ fontSize: 12, color: 'var(--ho-text-primary)', marginBottom: 8 }}>导入完成: {confirm.result.length} 个文件</div>
-            {confirm.result.map(r => (
-              <div key={r.path} style={{ fontSize: 10, color: 'var(--ho-text-secondary)', padding: '2px 0' }}>{r.name} ✓</div>
-            ))}
-            <Button variant="primary" style={{ width: '100%', marginTop: 12 }} onClick={closeDialog}>完成</Button>
-          </>
-        ) : confirm.importing ? (
-          <>
-            <div style={{ fontSize: 12, color: 'var(--ho-text-secondary)', marginBottom: 8 }}>正在拷贝文件至项目目录...</div>
-            <div style={{ height: 6, backgroundColor: 'var(--ho-bg-tertiary)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
-              <div style={{ width: `${confirm.progress}%`, height: '100%', backgroundColor: 'var(--ho-accent)', transition: 'width 0.3s' }} />
+            <div style={{ fontSize:12, color:'var(--ho-text-secondary)', marginBottom:12 }}>
+              {s.files.length} 个文件将被拷贝至:
+              <div style={{ fontSize:10, color:'var(--ho-accent)', fontFamily:'monospace', marginTop:4, padding:6, backgroundColor:'var(--ho-bg-tertiary)', borderRadius:4, wordBreak:'break-all' }}>{s.destDir}</div>
             </div>
-            <div style={{ fontSize: 10, color: 'var(--ho-text-tertiary)', textAlign: 'center' }}>{confirm.progress}%</div>
-            {confirm.error && <div style={{ fontSize: 10, color: 'var(--ho-peak)', marginTop: 8 }}>{confirm.error}</div>}
-          </>
-        ) : (
-          <>
-            <div style={{ fontSize: 12, color: 'var(--ho-text-secondary)', marginBottom: 12, lineHeight: 1.6 }}>
-              即将拷贝 <strong>{confirm.files.length}</strong> 个文件至项目目录:
-              <div style={{ fontSize: 10, color: 'var(--ho-accent)', fontFamily: 'monospace', marginTop: 4, padding: 6, backgroundColor: 'var(--ho-bg-tertiary)', borderRadius: 4 }}>{confirm.destDir}</div>
+            <div style={{ maxHeight:120, overflow:'auto', marginBottom:12 }}>
+              {s.files.slice(0,10).map(f => <div key={f.path} style={{ fontSize:10, color:'var(--ho-text-tertiary)', padding:'2px 0' }}>{f.name}</div>)}
+              {s.files.length > 10 && <div style={{ fontSize:10, color:'var(--ho-text-tertiary)' }}>...其他 {s.files.length - 10} 个</div>}
             </div>
-            {confirm.files.length <= 5 ? (
-              confirm.files.map(f => (
-                <div key={f.path} style={{ fontSize: 10, color: 'var(--ho-text-tertiary)', padding: '2px 0' }}>{f.name}</div>
-              ))
-            ) : (
-              <>
-                {confirm.files.slice(0, 5).map(f => (
-                  <div key={f.path} style={{ fontSize: 10, color: 'var(--ho-text-tertiary)', padding: '2px 0' }}>{f.name}</div>
-                ))}
-                <div style={{ fontSize: 10, color: 'var(--ho-text-tertiary)', padding: '2px 0' }}>...及其他 {confirm.files.length - 5} 个文件</div>
-              </>
-            )}
-            <div style={{ fontSize: 12, color: 'var(--ho-text-primary)', marginTop: 12, fontWeight: 500 }}>即将拷贝至项目目录，是否继续？</div>
-            <div style={{ fontSize: 10, color: 'var(--ho-text-tertiary)', marginTop: 4 }}>复制后将自动验证文件完整性 (SHA-256)</div>
-            <div style={{ display: 'flex', gap: 8, marginTop: 16, justifyContent: 'flex-end' }}>
-              <Button variant="default" onClick={closeDialog}>取消</Button>
-              <Button variant="primary" onClick={confirm.onConfirm}>继续导入</Button>
+            <div style={{ fontSize:13, color:'var(--ho-text-primary)', marginBottom:4, fontWeight:500 }}>即将拷贝至项目目录，是否继续？</div>
+            <div style={{ fontSize:10, color:'var(--ho-text-tertiary)', marginBottom:16 }}>拷贝后自动 SHA-256 校验</div>
+            <div style={{ display:'flex', gap:8, justifyContent:'flex-end' }}>
+              <Button variant="default" onClick={close}>取消</Button>
+              <Button variant="primary" onClick={startImport}>开始导入</Button>
+            </div>
+          </>
+        )}
+
+        {s.importing && (
+          <>
+            <div style={{ fontSize:11, color:'var(--ho-text-secondary)', marginBottom:8 }}>{s.label}</div>
+            <div style={{ height:8, backgroundColor:'var(--ho-bg-tertiary)', borderRadius:4, overflow:'hidden', marginBottom:8 }}>
+              <div style={{ width:`${Math.max(1,s.progress)}%`, height:'100%', backgroundColor:'var(--ho-accent)', borderRadius:4, transition:'width 0.2s' }} />
+            </div>
+            <div style={{ fontSize:12, color:'var(--ho-accent)', textAlign:'center', fontFamily:'monospace' }}>{s.progress}%</div>
+            {s.error && <div style={{ fontSize:10, color:'var(--ho-peak)', marginTop:8, padding:8, backgroundColor:'rgba(180,122,122,0.1)', borderRadius:4 }}>{s.error}</div>}
+          </>
+        )}
+
+        {!s.importing && s.result.length > 0 && !s.error && (
+          <>
+            <div style={{ fontSize:12, color:'var(--ho-safe)', marginBottom:8 }}>成功导入 {s.result.length} 个</div>
+            {s.result.map(r => <div key={r.path} style={{ fontSize:10, color:'var(--ho-text-secondary)', padding:'2px 0' }}>{r.name}</div>)}
+            <Button variant="primary" style={{ width:'100%', marginTop:12 }} onClick={close}>完成</Button>
+          </>
+        )}
+
+        {s.error && !s.importing && (
+          <>
+            <div style={{ fontSize:11, color:'var(--ho-peak)', marginBottom:12 }}>{s.error}</div>
+            <div style={{ display:'flex', gap:8, justifyContent:'flex-end' }}>
+              <Button variant="default" onClick={close}>关闭</Button>
+              <Button variant="primary" onClick={startImport}>重试</Button>
             </div>
           </>
         )}
@@ -196,14 +141,5 @@ export function useDITImport(options?: UseDITImportOptions) {
     </div>
   ) : null
 
-  return { importMedia, ImportDialog, isImporting, importProgress }
-}
-
-function detectTypeForDIT(name: string): 'video' | 'audio' | 'image' | 'lut' | 'other' {
-  const ext = name.toLowerCase().substring(name.lastIndexOf('.'))
-  if (['.mp4','.mov','.avi','.mxf','.r3d','.mts','.m2ts','.mpg','.mpeg','.mkv','.webm','.ts'].includes(ext)) return 'video'
-  if (['.wav','.mp3','.aac','.flac','.m4a','.ogg','.opus','.wma'].includes(ext)) return 'audio'
-  if (['.jpg','.jpeg','.png','.tif','.tiff','.bmp','.raw','.cr2','.nef','.arw','.dng','.gif','.webp'].includes(ext)) return 'image'
-  if (['.cube','.3dl','.csp','.spi1d','.spi3d'].includes(ext)) return 'lut'
-  return 'other'
+  return { importMedia, ImportDialog, isImporting: s.importing, importProgress: s.progress, startImport }
 }
