@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import { Button } from '../ui/Button'
-import { Slider } from '../ui/Slider'
-import { Toggle } from '../ui/Toggle'
 import { Icon } from '../ui/Icon'
 import { useAudioStore } from '../../stores/audioStore'
 
@@ -132,58 +130,29 @@ export function AudioPanel() {
             )}
             {activeTab==='effects' && (
               <div>
-                <div style={{marginBottom:'16px',padding:'8px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)'}}>
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
-                    <span style={{fontSize:'10px',color:'var(--ho-text-primary)'}}>EQ 均衡器</span>
-                    <Button variant="icon" style={{fontSize:'7px',width:'18px',height:'18px',border:'1px solid var(--ho-border)'}} onClick={()=>{}}><Icon name="check" size={10} color="var(--ho-text-secondary)" /></Button>
+                {effects.length === 0 && (
+                  <div style={{ padding:24, textAlign:'center', fontSize:10, color:'var(--ho-text-tertiary)' }}>
+                    暂无效果器
                   </div>
-                  <div style={{display:'flex',gap:'4px',height:'60px',alignItems:'flex-end'}}>
-                    {['31','62','125','250','500','1k','4k','8k'].map((freq,i) => (
-                      <div key={freq} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:'2px'}}>
-                        <input type="range" min={-12} max={12} value={eqBands[i]||0} onChange={e=>{const n=[...eqBands];n[i]=Number(e.target.value);setEqBands(n)}} style={{width:'60px',height:'3px',writingMode:'vertical-lr',direction:'rtl',accentColor:'var(--ho-accent)'}} />
-                        <span style={{fontSize:'7px',color:'var(--ho-text-tertiary)',marginTop:'2px'}}>{freq}</span>
+                )}
+                {effects.map(fx => (
+                  <div key={fx.id} style={{marginBottom:'12px',padding:'8px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)'}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
+                      <span style={{fontSize:'10px',color:'var(--ho-text-primary)'}}>{fx.name}</span>
+                      <div style={{display:'flex',gap:'6px'}}>
+                        <Icon name="check" size={12} color={fx.bypassed ? 'var(--ho-accent)' : 'var(--ho-text-tertiary)'} onClick={() => toggleBypass(fx.id)} />
+                        <Icon name="close" size={10} color="var(--ho-text-tertiary)" onClick={() => removeEffect(fx.id)} />
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
-                <div style={{marginBottom:'16px',padding:'8px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)'}}>
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
-                    <span style={{fontSize:'10px',color:'var(--ho-text-primary)'}}>压缩器</span>
-                    <Button variant="icon" style={{fontSize:'7px',width:'18px',height:'18px',border:'1px solid var(--ho-border)'}}><Icon name="check" size={10} color="var(--ho-text-secondary)" /></Button>
-                  </div>
-                  <div style={{display:'flex',alignItems:'center',gap:'6px',marginBottom:'4px'}}>
-                    <span style={{fontSize:'8px',color:'var(--ho-text-tertiary)',width:'36px'}}>阈值</span>
-                    <input type="range" min={-60} max={0} value={compThreshold} onChange={e=>setCompThreshold(Number(e.target.value))} style={{flex:1,height:'3px',accentColor:'var(--ho-accent)'}} />
-                    <span style={{fontSize:'8px',fontFamily:'var(--ho-font-family-mono)',color:'var(--ho-accent)',width:'24px',textAlign:'right'}}>{compThreshold}dB</span>
-                  </div>
-                  <div style={{display:'flex',alignItems:'center',gap:'6px'}}>
-                    <span style={{fontSize:'8px',color:'var(--ho-text-tertiary)',width:'36px'}}>比率</span>
-                    <select value={compRatio} onChange={e=>setCompRatio(Number(e.target.value))} style={{flex:1,height:'20px',backgroundColor:'var(--ho-bg-tertiary)',border:'1px solid var(--ho-border)',borderRadius:'4px',color:'var(--ho-text-secondary)',fontSize:'8px',padding:'0 4px',outline:'none'}}><option value={2}>2:1</option><option value={4}>4:1</option><option value={8}>8:1</option><option value={20}>20:1</option></select>
-                  </div>
-                </div>
-                <div style={{marginBottom:'16px',padding:'8px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)'}}>
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
-                    <span style={{fontSize:'10px',color:'var(--ho-text-primary)'}}>混响</span>
-                    <Button variant="icon" style={{fontSize:'7px',width:'18px',height:'18px',border:'1px solid var(--ho-border)'}}><Icon name="check" size={10} color="var(--ho-text-secondary)" /></Button>
-                  </div>
-                  <div style={{display:'flex',alignItems:'center',gap:'6px',marginBottom:'4px'}}>
-                    <span style={{fontSize:'8px',color:'var(--ho-text-tertiary)',width:'36px'}}>房间</span>
-                    <input type="range" min={0} max={100} value={reverbRoom} onChange={e=>setReverbRoom(Number(e.target.value))} style={{flex:1,height:'3px',accentColor:'var(--ho-accent)'}} />
-                    <span style={{fontSize:'8px',color:'var(--ho-accent)',width:'20px',textAlign:'right'}}>{reverbRoom}</span>
-                  </div>
-                  <div style={{display:'flex',alignItems:'center',gap:'6px'}}>
-                    <span style={{fontSize:'8px',color:'var(--ho-text-tertiary)',width:'36px'}}>衰减</span>
-                    <input type="range" min={0.1} max={10} step={0.1} value={reverbDecay} onChange={e=>setReverbDecay(Number(e.target.value))} style={{flex:1,height:'3px',accentColor:'var(--ho-accent)'}} />
-                    <span style={{fontSize:'8px',color:'var(--ho-accent)',width:'20px',textAlign:'right'}}>{reverbDecay}s</span>
-                  </div>
-                </div>
-                <Button variant="default" style={{width:'100%',fontSize:'10px',height:'28px'}}><Icon name="plus" size={12} color="var(--ho-text-secondary)" /> 添加效果器</Button>
+                ))}
+                <Button variant="default" style={{width:'100%',fontSize:'10px',height:'28px',marginTop:'8px'}} onClick={()=>setActiveTab('library')}><Icon name="plus" size={12} color="var(--ho-text-secondary)" /> 添加效果器</Button>
               </div>
             )}
             {activeTab==='library' && (
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6px'}}>
                 {EFFECTS_LIBRARY.map(fx => (
-                  <div key={fx.name} style={{padding:'6px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)',cursor:'pointer'}}>
+                  <div key={fx.name} onClick={() => addEffect({ id:`fx_${Date.now()}`, name:fx.name, type:fx.name, bypassed:false, params:{} })} style={{padding:'6px',border:'1px solid var(--ho-border)',borderRadius:'var(--ho-radius-md)',cursor:'pointer'}}>
                     <div style={{width:'16px',height:'16px',backgroundColor:'rgba(255,255,255,0.04)',borderRadius:'3px',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'3px'}}><span style={{fontSize:'8px',color:'var(--ho-text-tertiary)'}}>.</span></div>
                     <div style={{fontSize:'9px',color:'var(--ho-text-primary)',marginBottom:'1px'}}>{fx.name}</div>
                     <div style={{fontSize:'8px',color:'var(--ho-text-tertiary)'}}>{fx.desc}</div>
