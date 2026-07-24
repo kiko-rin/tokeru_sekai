@@ -1,0 +1,170 @@
+Date : 2026-07-24 14:21:04
+Directory : e:\CodingProjects\tokeru_sekai
+Total : 103 files,  32599 codes, 57 comments, 1944 blanks, all 34600 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JavaScript         |          1 |     13,590 |          7 |          2 |     13,599 |
+| JSON               |          7 |      6,793 |          0 |          4 |      6,797 |
+| TypeScript         |         40 |      4,169 |         35 |        586 |      4,790 |
+| Markdown           |         14 |      3,829 |          0 |      1,019 |      4,848 |
+| TypeScript JSX     |         36 |      3,738 |         15 |        292 |      4,045 |
+| vue                |          1 |        339 |          0 |         14 |        353 |
+| PostCSS            |          2 |        106 |          0 |         25 |        131 |
+| HTML               |          1 |         22 |          0 |          1 |         23 |
+| JSON with Comments |          1 |         13 |          0 |          1 |         14 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                         | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                            |        103 |     32,599 |         57 |      1,944 |     34,600 |
+| . (Files)                                                                                    |          9 |      6,567 |          0 |         60 |      6,627 |
+| docs                                                                                         |         17 |     18,370 |         41 |      1,020 |     19,431 |
+| docs (Files)                                                                                 |          2 |        574 |          0 |        161 |        735 |
+| docs\spine                                                                                   |          5 |     14,291 |         41 |         54 |     14,386 |
+| docs\spine (Files)                                                                           |          3 |     14,235 |         41 |         54 |     14,330 |
+| docs\spine\demofile                                                                          |          2 |         56 |          0 |          0 |         56 |
+| docs\spine\demofile\char_1037_amiya3                                                         |          1 |         28 |          0 |          0 |         28 |
+| docs\spine\demofile\char_2025_shu                                                            |          1 |         28 |          0 |          0 |         28 |
+| docs\规范文档                                                                                    |         10 |      3,505 |          0 |        805 |      4,310 |
+| src                                                                                          |         77 |      7,662 |         16 |        864 |      8,542 |
+| src\main                                                                                     |          1 |        113 |          0 |         22 |        135 |
+| src\pages                                                                                    |          1 |        149 |          0 |         12 |        161 |
+| src\preload                                                                                  |          2 |        109 |          0 |         11 |        120 |
+| src\renderer                                                                                 |         72 |      7,085 |         16 |        800 |      7,901 |
+| src\renderer (Files)                                                                         |          1 |         22 |          0 |          1 |         23 |
+| src\renderer\src                                                                             |         71 |      7,063 |         16 |        799 |      7,878 |
+| src\renderer\src (Files)                                                                     |          3 |         28 |          1 |          6 |         35 |
+| src\renderer\src\components                                                                  |         31 |      2,937 |         15 |        243 |      3,195 |
+| src\renderer\src\components\layout                                                           |          3 |        269 |          0 |         22 |        291 |
+| src\renderer\src\components\tabs                                                             |         21 |      2,270 |         15 |        193 |      2,478 |
+| src\renderer\src\components\tabs (Files)                                                     |          9 |      1,766 |         15 |        133 |      1,914 |
+| src\renderer\src\components\tabs\drawing                                                     |          6 |        360 |          0 |         40 |        400 |
+| src\renderer\src\components\tabs\puppet                                                      |          6 |        144 |          0 |         20 |        164 |
+| src\renderer\src\components\ui                                                               |          7 |        398 |          0 |         28 |        426 |
+| src\renderer\src\hooks                                                                       |          3 |         81 |          0 |         21 |        102 |
+| src\renderer\src\lib                                                                         |         23 |      2,857 |          0 |        441 |      3,298 |
+| src\renderer\src\lib\color                                                                   |          5 |      1,172 |          0 |        194 |      1,366 |
+| src\renderer\src\lib\drawing                                                                 |         10 |        658 |          0 |        108 |        766 |
+| src\renderer\src\lib\ffmpeg                                                                  |          3 |        428 |          0 |         47 |        475 |
+| src\renderer\src\lib\input                                                                   |          2 |        140 |          0 |         23 |        163 |
+| src\renderer\src\lib\spine                                                                   |          3 |        459 |          0 |         69 |        528 |
+| src\renderer\src\pages                                                                       |          2 |        624 |          0 |         32 |        656 |
+| src\renderer\src\stores                                                                      |          7 |        430 |          0 |         31 |        461 |
+| src\renderer\src\styles                                                                      |          2 |        106 |          0 |         25 |        131 |
+| src\shared                                                                                   |          1 |        206 |          0 |         19 |        225 |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                     | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| e:\CodingProjects\tokeru_sekai\AGENTS.md                                                     | Markdown           |        162 |          0 |         24 |        186 |
+| e:\CodingProjects\tokeru_sekai\README.md                                                     | Markdown           |         98 |          0 |         25 |        123 |
+| e:\CodingProjects\tokeru_sekai\TODO.md                                                       | Markdown           |         31 |          0 |          4 |         35 |
+| e:\CodingProjects\tokeru_sekai\docs\spine\demofile\char_1037_amiya3\meta.json                | JSON               |         28 |          0 |          0 |         28 |
+| e:\CodingProjects\tokeru_sekai\docs\spine\demofile\char_2025_shu\meta.json                   | JSON               |         28 |          0 |          0 |         28 |
+| e:\CodingProjects\tokeru_sekai\docs\spine\spine-webgl.js                                     | JavaScript         |     13,590 |          7 |          2 |     13,599 |
+| e:\CodingProjects\tokeru_sekai\docs\spine\spine.ts                                           | TypeScript         |        306 |         34 |         38 |        378 |
+| e:\CodingProjects\tokeru_sekai\docs\spine\spine.vue                                          | vue                |        339 |          0 |         14 |        353 |
+| e:\CodingProjects\tokeru_sekai\docs\ui规范.md                                                  | Markdown           |        160 |          0 |         62 |        222 |
+| e:\CodingProjects\tokeru_sekai\docs\创绘面板需求.md                                                | Markdown           |        414 |          0 |         99 |        513 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\主界面大纲快编需求规范.md                                      | Markdown           |        209 |          0 |         62 |        271 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\创绘空间需求规范.md                                         | Markdown           |        783 |          0 |        203 |        986 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\剪辑台UI.json                                          | JSON               |        541 |          0 |          0 |        541 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\剪辑台需求规范.md                                          | Markdown           |        254 |          0 |         75 |        329 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\发布页面参数规范.md                                         | Markdown           |        329 |          0 |         95 |        424 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\推荐扩展功能规范.md                                         | Markdown           |        234 |          0 |         77 |        311 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\设置项目格式快捷键规范.md                                      | Markdown           |        337 |          0 |         56 |        393 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\调色调音发布设置需求规范.md                                     | Markdown           |        315 |          0 |        101 |        416 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\调色面板参数规范.md                                         | Markdown           |        378 |          0 |         98 |        476 |
+| e:\CodingProjects\tokeru_sekai\docs\规范文档\调音面板参数规范.md                                         | Markdown           |        125 |          0 |         38 |        163 |
+| e:\CodingProjects\tokeru_sekai\electron.vite.config.ts                                       | TypeScript         |         67 |          0 |          2 |         69 |
+| e:\CodingProjects\tokeru_sekai\package-lock.json                                             | JSON               |      6,059 |          0 |          1 |      6,060 |
+| e:\CodingProjects\tokeru_sekai\package.json                                                  | JSON               |         87 |          0 |          1 |         88 |
+| e:\CodingProjects\tokeru_sekai\src\main\index.ts                                             | TypeScript         |        113 |          0 |         22 |        135 |
+| e:\CodingProjects\tokeru_sekai\src\pages\ProjectManager.tsx                                  | TypeScript JSX     |        149 |          0 |         12 |        161 |
+| e:\CodingProjects\tokeru_sekai\src\preload\index.d.ts                                        | TypeScript         |         51 |          0 |          5 |         56 |
+| e:\CodingProjects\tokeru_sekai\src\preload\index.ts                                          | TypeScript         |         58 |          0 |          6 |         64 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\index.html                                       | HTML               |         22 |          0 |          1 |         23 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\App.tsx                                      | TypeScript JSX     |         16 |          0 |          3 |         19 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\SideNav.tsx                | TypeScript JSX     |        112 |          0 |          6 |        118 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\TabBar.tsx                 | TypeScript JSX     |        127 |          0 |         10 |        137 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\TitleBar.tsx               | TypeScript JSX     |         30 |          0 |          6 |         36 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\AudioPanel.tsx               | TypeScript JSX     |        277 |          0 |         14 |        291 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\ColorPanel.tsx               | TypeScript JSX     |        226 |          0 |         15 |        241 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\CreativePanel.tsx            | TypeScript JSX     |        180 |          0 |         11 |        191 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\EditorPanel.tsx              | TypeScript JSX     |        248 |         11 |         17 |        276 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\NewProjectDialog.tsx         | TypeScript JSX     |         89 |          0 |         13 |        102 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\OutlinePanel.tsx             | TypeScript JSX     |        194 |          3 |         20 |        217 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\PublishPanel.tsx             | TypeScript JSX     |        190 |          1 |         15 |        206 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\QuickEditPanel.tsx           | TypeScript JSX     |        159 |          0 |         12 |        171 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\SettingsPage.tsx             | TypeScript JSX     |        203 |          0 |         16 |        219 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\BrushPanel.tsx       | TypeScript JSX     |         39 |          0 |          4 |         43 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\DrawingCanvas.tsx    | TypeScript JSX     |         88 |          0 |          9 |         97 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\KeyframeTimeline.tsx | TypeScript JSX     |         68 |          0 |         10 |         78 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\LayerPanel.tsx       | TypeScript JSX     |         48 |          0 |          5 |         53 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\MRPanel.tsx          | TypeScript JSX     |         82 |          0 |          7 |         89 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\ToolBar.tsx          | TypeScript JSX     |         35 |          0 |          5 |         40 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\AnimationList.tsx     | TypeScript JSX     |         26 |          0 |          3 |         29 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\PuppetCanvas.tsx      | TypeScript JSX     |         16 |          0 |          3 |         19 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\PuppetControls.tsx    | TypeScript JSX     |         27 |          0 |          4 |         31 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SkinSelector.tsx      | TypeScript JSX     |         26 |          0 |          3 |         29 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SpineLoader.tsx       | TypeScript JSX     |         25 |          0 |          5 |         30 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SpineSetupGuide.tsx   | TypeScript JSX     |         24 |          0 |          2 |         26 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Button.tsx                     | TypeScript JSX     |         73 |          0 |          5 |         78 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Icon.tsx                       | TypeScript JSX     |        130 |          0 |          5 |        135 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Input.tsx                      | TypeScript JSX     |         29 |          0 |          3 |         32 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Panel.tsx                      | TypeScript JSX     |         20 |          0 |          3 |         23 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Slider.tsx                     | TypeScript JSX     |         70 |          0 |          5 |         75 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Tag.tsx                        | TypeScript JSX     |         40 |          0 |          4 |         44 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Toggle.tsx                     | TypeScript JSX     |         36 |          0 |          3 |         39 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useDragDrop.ts                         | TypeScript         |         21 |          0 |          6 |         27 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useKeyboardShortcuts.ts                | TypeScript         |         25 |          0 |          6 |         31 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useTabCollapse.ts                      | TypeScript         |         35 |          0 |          9 |         44 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ACEColorPipeline.ts                | TypeScript         |        379 |          0 |         60 |        439 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ColorGrade.ts                      | TypeScript         |        205 |          0 |         28 |        233 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ColorSpace.ts                      | TypeScript         |        145 |          0 |         24 |        169 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\LUTParser.ts                       | TypeScript         |        239 |          0 |         41 |        280 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\Scopes.ts                          | TypeScript         |        204 |          0 |         41 |        245 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\AIComposer.ts                    | TypeScript         |         58 |          0 |         10 |         68 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\BrushEngine.ts                   | TypeScript         |         77 |          0 |         13 |         90 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\BrushImporter.ts                 | TypeScript         |         26 |          0 |          3 |         29 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\CanvasEngine.ts                  | TypeScript         |         52 |          0 |         11 |         63 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\ColorMatcher.ts                  | TypeScript         |         83 |          0 |         16 |         99 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\KeyframeEngine.ts                | TypeScript         |         66 |          0 |         13 |         79 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\LayerManager.ts                  | TypeScript         |        131 |          0 |         14 |        145 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\LightMatcher.ts                  | TypeScript         |         80 |          0 |         15 |         95 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\MRComposer.ts                    | TypeScript         |         43 |          0 |          5 |         48 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\ProjectionGen.ts                 | TypeScript         |         42 |          0 |          8 |         50 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\FFmpegService.ts                  | TypeScript         |         99 |          0 |         18 |        117 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\codecConfig.ts                    | TypeScript         |        181 |          0 |          8 |        189 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\colorConversion.ts                | TypeScript         |        148 |          0 |         21 |        169 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\input\PointerHandler.ts                  | TypeScript         |        107 |          0 |         17 |        124 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\input\PressureCurve.ts                   | TypeScript         |         33 |          0 |          6 |         39 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\SpineRenderer.ts                   | TypeScript         |        150 |          0 |         27 |        177 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\SpineRuntime.ts                    | TypeScript         |         36 |          0 |          5 |         41 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\spine-webgl.d.ts                   | TypeScript         |        273 |          0 |         37 |        310 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\main.tsx                                     | TypeScript JSX     |         12 |          0 |          2 |         14 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\pages\ProjectManager.tsx                     | TypeScript JSX     |        484 |          0 |         21 |        505 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\pages\ProjectView.tsx                        | TypeScript JSX     |        140 |          0 |         11 |        151 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\audioStore.ts                         | TypeScript         |         83 |          0 |          7 |         90 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\colorStore.ts                         | TypeScript         |         74 |          0 |          4 |         78 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\creativeStore.ts                      | TypeScript         |        116 |          0 |          7 |        123 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\projectStore.ts                       | TypeScript         |         22 |          0 |          3 |         25 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\settingsStore.ts                      | TypeScript         |         74 |          0 |          4 |         78 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\timelineStore.ts                      | TypeScript         |         42 |          0 |          3 |         45 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\uiStore.ts                            | TypeScript         |         19 |          0 |          3 |         22 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\styles\design-tokens.css                     | PostCSS            |         41 |          0 |         11 |         52 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\styles\global.css                            | PostCSS            |         65 |          0 |         14 |         79 |
+| e:\CodingProjects\tokeru_sekai\src\renderer\src\vite-env.d.ts                                | TypeScript         |          0 |          1 |          1 |          2 |
+| e:\CodingProjects\tokeru_sekai\src\shared\types.ts                                           | TypeScript         |        206 |          0 |         19 |        225 |
+| e:\CodingProjects\tokeru_sekai\tsconfig.json                                                 | JSON with Comments |         13 |          0 |          1 |         14 |
+| e:\CodingProjects\tokeru_sekai\tsconfig.node.json                                            | JSON               |         22 |          0 |          1 |         23 |
+| e:\CodingProjects\tokeru_sekai\tsconfig.web.json                                             | JSON               |         28 |          0 |          1 |         29 |
+| Total                                                                                        |                    |     32,599 |         57 |      1,944 |     34,600 |
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

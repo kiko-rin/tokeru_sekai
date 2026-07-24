@@ -1,0 +1,105 @@
+"filename", "language", "JSON with Comments", "Markdown", "JSON", "TypeScript", "PostCSS", "HTML", "TypeScript JSX", "vue", "JavaScript", "comment", "blank", "total"
+"e:\CodingProjects\tokeru_sekai\AGENTS.md", "Markdown", 0, 162, 0, 0, 0, 0, 0, 0, 0, 0, 24, 186
+"e:\CodingProjects\tokeru_sekai\README.md", "Markdown", 0, 98, 0, 0, 0, 0, 0, 0, 0, 0, 25, 123
+"e:\CodingProjects\tokeru_sekai\TODO.md", "Markdown", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 4, 35
+"e:\CodingProjects\tokeru_sekai\docs\spine\demofile\char_1037_amiya3\meta.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28
+"e:\CodingProjects\tokeru_sekai\docs\spine\demofile\char_2025_shu\meta.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28
+"e:\CodingProjects\tokeru_sekai\docs\spine\spine-webgl.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 13590, 7, 2, 13599
+"e:\CodingProjects\tokeru_sekai\docs\spine\spine.ts", "TypeScript", 0, 0, 0, 306, 0, 0, 0, 0, 0, 34, 38, 378
+"e:\CodingProjects\tokeru_sekai\docs\spine\spine.vue", "vue", 0, 0, 0, 0, 0, 0, 0, 339, 0, 0, 14, 353
+"e:\CodingProjects\tokeru_sekai\docs\ui规范.md", "Markdown", 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 62, 222
+"e:\CodingProjects\tokeru_sekai\docs\创绘面板需求.md", "Markdown", 0, 414, 0, 0, 0, 0, 0, 0, 0, 0, 99, 513
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\主界面大纲快编需求规范.md", "Markdown", 0, 209, 0, 0, 0, 0, 0, 0, 0, 0, 62, 271
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\创绘空间需求规范.md", "Markdown", 0, 783, 0, 0, 0, 0, 0, 0, 0, 0, 203, 986
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\剪辑台UI.json", "JSON", 0, 0, 541, 0, 0, 0, 0, 0, 0, 0, 0, 541
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\剪辑台需求规范.md", "Markdown", 0, 254, 0, 0, 0, 0, 0, 0, 0, 0, 75, 329
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\发布页面参数规范.md", "Markdown", 0, 329, 0, 0, 0, 0, 0, 0, 0, 0, 95, 424
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\推荐扩展功能规范.md", "Markdown", 0, 234, 0, 0, 0, 0, 0, 0, 0, 0, 77, 311
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\设置项目格式快捷键规范.md", "Markdown", 0, 337, 0, 0, 0, 0, 0, 0, 0, 0, 56, 393
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\调色调音发布设置需求规范.md", "Markdown", 0, 315, 0, 0, 0, 0, 0, 0, 0, 0, 101, 416
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\调色面板参数规范.md", "Markdown", 0, 378, 0, 0, 0, 0, 0, 0, 0, 0, 98, 476
+"e:\CodingProjects\tokeru_sekai\docs\规范文档\调音面板参数规范.md", "Markdown", 0, 125, 0, 0, 0, 0, 0, 0, 0, 0, 38, 163
+"e:\CodingProjects\tokeru_sekai\electron.vite.config.ts", "TypeScript", 0, 0, 0, 67, 0, 0, 0, 0, 0, 0, 2, 69
+"e:\CodingProjects\tokeru_sekai\package-lock.json", "JSON", 0, 0, 6059, 0, 0, 0, 0, 0, 0, 0, 1, 6060
+"e:\CodingProjects\tokeru_sekai\package.json", "JSON", 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 1, 88
+"e:\CodingProjects\tokeru_sekai\src\main\index.ts", "TypeScript", 0, 0, 0, 113, 0, 0, 0, 0, 0, 0, 22, 135
+"e:\CodingProjects\tokeru_sekai\src\pages\ProjectManager.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 149, 0, 0, 0, 12, 161
+"e:\CodingProjects\tokeru_sekai\src\preload\index.d.ts", "TypeScript", 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 5, 56
+"e:\CodingProjects\tokeru_sekai\src\preload\index.ts", "TypeScript", 0, 0, 0, 58, 0, 0, 0, 0, 0, 0, 6, 64
+"e:\CodingProjects\tokeru_sekai\src\renderer\index.html", "HTML", 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 1, 23
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\App.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 3, 19
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\SideNav.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 112, 0, 0, 0, 6, 118
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\TabBar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 10, 137
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\layout\TitleBar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 6, 36
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\AudioPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 277, 0, 0, 0, 14, 291
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\ColorPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 226, 0, 0, 0, 15, 241
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\CreativePanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 180, 0, 0, 0, 11, 191
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\EditorPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 248, 0, 0, 11, 17, 276
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\NewProjectDialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 89, 0, 0, 0, 13, 102
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\OutlinePanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 194, 0, 0, 3, 20, 217
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\PublishPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 190, 0, 0, 1, 15, 206
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\QuickEditPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 159, 0, 0, 0, 12, 171
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\SettingsPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 203, 0, 0, 0, 16, 219
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\BrushPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 39, 0, 0, 0, 4, 43
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\DrawingCanvas.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 88, 0, 0, 0, 9, 97
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\KeyframeTimeline.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 10, 78
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\LayerPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 5, 53
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\MRPanel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 7, 89
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\drawing\ToolBar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 5, 40
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\AnimationList.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 3, 29
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\PuppetCanvas.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 3, 19
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\PuppetControls.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 4, 31
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SkinSelector.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 3, 29
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SpineLoader.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 5, 30
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\tabs\puppet\SpineSetupGuide.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 2, 26
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Button.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 5, 78
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Icon.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 130, 0, 0, 0, 5, 135
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Input.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 3, 32
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Panel.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 3, 23
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Slider.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 70, 0, 0, 0, 5, 75
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Tag.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 4, 44
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\components\ui\Toggle.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 3, 39
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useDragDrop.ts", "TypeScript", 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 6, 27
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useKeyboardShortcuts.ts", "TypeScript", 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 6, 31
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\hooks\useTabCollapse.ts", "TypeScript", 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 9, 44
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ACEColorPipeline.ts", "TypeScript", 0, 0, 0, 379, 0, 0, 0, 0, 0, 0, 60, 439
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ColorGrade.ts", "TypeScript", 0, 0, 0, 205, 0, 0, 0, 0, 0, 0, 28, 233
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\ColorSpace.ts", "TypeScript", 0, 0, 0, 145, 0, 0, 0, 0, 0, 0, 24, 169
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\LUTParser.ts", "TypeScript", 0, 0, 0, 239, 0, 0, 0, 0, 0, 0, 41, 280
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\color\Scopes.ts", "TypeScript", 0, 0, 0, 204, 0, 0, 0, 0, 0, 0, 41, 245
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\AIComposer.ts", "TypeScript", 0, 0, 0, 58, 0, 0, 0, 0, 0, 0, 10, 68
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\BrushEngine.ts", "TypeScript", 0, 0, 0, 77, 0, 0, 0, 0, 0, 0, 13, 90
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\BrushImporter.ts", "TypeScript", 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\CanvasEngine.ts", "TypeScript", 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 11, 63
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\ColorMatcher.ts", "TypeScript", 0, 0, 0, 83, 0, 0, 0, 0, 0, 0, 16, 99
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\KeyframeEngine.ts", "TypeScript", 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 13, 79
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\LayerManager.ts", "TypeScript", 0, 0, 0, 131, 0, 0, 0, 0, 0, 0, 14, 145
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\LightMatcher.ts", "TypeScript", 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 15, 95
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\MRComposer.ts", "TypeScript", 0, 0, 0, 43, 0, 0, 0, 0, 0, 0, 5, 48
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\drawing\ProjectionGen.ts", "TypeScript", 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 8, 50
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\FFmpegService.ts", "TypeScript", 0, 0, 0, 99, 0, 0, 0, 0, 0, 0, 18, 117
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\codecConfig.ts", "TypeScript", 0, 0, 0, 181, 0, 0, 0, 0, 0, 0, 8, 189
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\ffmpeg\colorConversion.ts", "TypeScript", 0, 0, 0, 148, 0, 0, 0, 0, 0, 0, 21, 169
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\input\PointerHandler.ts", "TypeScript", 0, 0, 0, 107, 0, 0, 0, 0, 0, 0, 17, 124
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\input\PressureCurve.ts", "TypeScript", 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 6, 39
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\SpineRenderer.ts", "TypeScript", 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 27, 177
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\SpineRuntime.ts", "TypeScript", 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 5, 41
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\lib\spine\spine-webgl.d.ts", "TypeScript", 0, 0, 0, 273, 0, 0, 0, 0, 0, 0, 37, 310
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\main.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 2, 14
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\pages\ProjectManager.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 484, 0, 0, 0, 21, 505
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\pages\ProjectView.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 140, 0, 0, 0, 11, 151
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\audioStore.ts", "TypeScript", 0, 0, 0, 83, 0, 0, 0, 0, 0, 0, 7, 90
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\colorStore.ts", "TypeScript", 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 4, 78
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\creativeStore.ts", "TypeScript", 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 7, 123
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\projectStore.ts", "TypeScript", 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 3, 25
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\settingsStore.ts", "TypeScript", 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 4, 78
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\timelineStore.ts", "TypeScript", 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 3, 45
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\stores\uiStore.ts", "TypeScript", 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\styles\design-tokens.css", "PostCSS", 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 11, 52
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\styles\global.css", "PostCSS", 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 14, 79
+"e:\CodingProjects\tokeru_sekai\src\renderer\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"e:\CodingProjects\tokeru_sekai\src\shared\types.ts", "TypeScript", 0, 0, 0, 206, 0, 0, 0, 0, 0, 0, 19, 225
+"e:\CodingProjects\tokeru_sekai\tsconfig.json", "JSON with Comments", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14
+"e:\CodingProjects\tokeru_sekai\tsconfig.node.json", "JSON", 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 1, 23
+"e:\CodingProjects\tokeru_sekai\tsconfig.web.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 1, 29
+"Total", "-", 13, 3829, 6793, 4169, 106, 22, 3738, 339, 13590, 57, 1944, 34600
