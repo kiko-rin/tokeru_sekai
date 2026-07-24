@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { Tag } from '../components/ui/Tag'
@@ -26,6 +26,15 @@ export function ProjectView() {
     const next = TAB_ORDER[(idx + delta + TAB_ORDER.length) % TAB_ORDER.length]
     setActiveTab(next)
   }, [activeTab])
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail
+      if (detail?.tab && TAB_ORDER.includes(detail.tab)) setActiveTab(detail.tab)
+    }
+    window.addEventListener('navigate-tab', handler)
+    return () => window.removeEventListener('navigate-tab', handler)
+  }, [])
 
   useKeyboardShortcuts({
     'ctrl-s': () => console.log('save'),

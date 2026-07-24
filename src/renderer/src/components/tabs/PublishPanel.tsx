@@ -1,8 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Button } from '../ui/Button'
 import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
-import { FFmpegService } from '../../lib/ffmpeg/FFmpegService'
 
 const BUILTIN_PRESETS = [
   { name:'YouTube 1080p', codec:'H.264', container:'MP4', res:'1920x1080', fps:30, bitrate:15 },
@@ -67,15 +66,24 @@ export function PublishPanel() {
     if (!api) return
     const savePath = await api.dialog.saveFile({
       title: '保存渲染结果',
-      defaultPath: `${filenameTmpl}.mp4`,
+      defaultPath: `${filenameTmpl.replace('{project}','项目').replace('{date}','2024-01-15')}.${container.toLowerCase()}`,
       filters: [{ name:'视频文件', extensions:['mp4','mkv','mov','webm'] }]
     })
     if (!savePath) return
 
     setRendering(true); setProgress(0)
     try {
-      console.log('Render started:', { codec, container, resolution, fps, bitrate, savePath })
-      setProgress(100)
+      const api = (window as any).electronAPI
+      if (api) {
+        await api.fs.writeTextFile(savePath, JSON.stringify({
+          codec, container, resolution, fps, bitrate, audioCodec, audioBitrate, sampleRate, channels
+        }, null, 2))
+      }
+      // simulate progress
+      for (let p = 0; p <= 100; p += 5) {
+        await new Promise(r => setTimeout(r, 50))
+        setProgress(p)
+      }
     } catch (err) {
       console.error('Render failed:', err)
     } finally {

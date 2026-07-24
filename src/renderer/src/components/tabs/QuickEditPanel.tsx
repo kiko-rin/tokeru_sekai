@@ -32,12 +32,28 @@ export function QuickEditPanel() {
   const [duration, setDuration] = useState(5)
   const [speed, setSpeed] = useState(100)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [storyboardItems, setStoryboardItems] = useState<number[]>([0, 1, 2, 3])
   const { onDragStart, onDrop, onDragOver } = useDragDrop()
 
   const handleDropOnStoryboard = useCallback((data: Record<string,unknown>) => {
     console.log('Dropped on storyboard:', data)
+    setSelectedIndex(storyboardItems.length)
+    setStoryboardItems(prev => [...prev, prev.length])
+  }, [storyboardItems])
+
+  const clearStoryboard = () => {
+    setStoryboardItems([])
+    setSelectedIndex(null)
+  }
+
+  const autoArrange = () => {
+    setStoryboardItems([0, 1, 2, 3, 4, 5])
     setSelectedIndex(0)
-  }, [])
+  }
+
+  const sendToEditor = () => {
+    window.dispatchEvent(new CustomEvent('navigate-tab', { detail: { tab: 'editor' } }))
+  }
 
   return (
     <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
@@ -81,15 +97,15 @@ export function QuickEditPanel() {
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div style={{ height: '36px', borderBottom: '1px solid var(--ho-border)', display: 'flex', alignItems: 'center', padding: '0 12px', gap: '8px', flexShrink: 0 }}>
-          <Button variant="ghost">自动编排</Button>
-          <Button variant="ghost">清空</Button>
+          <Button variant="ghost" onClick={autoArrange}>自动编排</Button>
+          <Button variant="ghost" onClick={clearStoryboard}>清空</Button>
           <div style={{ width: '1px', height: '16px', backgroundColor: 'var(--ho-border)' }} />
           <span style={{ fontSize: 'var(--ho-font-size-xs)', color: 'var(--ho-text-secondary)' }}>单片段时长:</span>
           <Input type="number" style={{ width: '60px', height: '24px', padding: '0 6px' }} value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
           <span style={{ fontSize: 'var(--ho-font-size-xs)', color: 'var(--ho-text-secondary)' }}>秒</span>
         </div>
         <div style={{ flex: 1, overflow: 'auto', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start', alignContent: 'flex-start', flexWrap: 'wrap' }} onDrop={onDrop(handleDropOnStoryboard)} onDragOver={onDragOver}>
-          {[0, 1, 2, 3].map((i) => (
+          {storyboardItems.map((i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div
                 onClick={() => setSelectedIndex(i)}
@@ -104,13 +120,13 @@ export function QuickEditPanel() {
                 </div>
                 <div style={{ height: '3px', backgroundColor: 'var(--ho-border)', margin: '0' }} />
               </div>
-              {i < 3 && <Icon name="chevron-right" size={16} color="var(--ho-text-tertiary)" />}
+              {i < storyboardItems.length - 1 && <Icon name="chevron-right" size={16} color="var(--ho-text-tertiary)" />}
             </div>
           ))}
         </div>
         <div style={{ height: '36px', borderTop: '1px solid var(--ho-border)', display: 'flex', alignItems: 'center', padding: '0 12px', justifyContent: 'space-between', flexShrink: 0 }}>
           <span style={{ fontSize: 'var(--ho-font-size-xs)', color: 'var(--ho-text-tertiary)' }}>总时长: 00:45</span>
-          <Button variant="primary">发送到剪辑台 <Icon name="chevron-right" size={14} /></Button>
+          <Button variant="primary" onClick={sendToEditor}>发送到剪辑台 <Icon name="chevron-right" size={14} /></Button>
         </div>
       </div>
 

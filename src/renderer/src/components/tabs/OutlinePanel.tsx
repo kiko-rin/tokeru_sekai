@@ -39,6 +39,29 @@ export function OutlinePanel() {
     setScenes(scenes.map((s) => s.id === id ? { ...s, expanded: !s.expanded } : s))
   }
 
+  const addScene = () => {
+    const id = `s${Date.now()}`
+    setScenes([...scenes, { id, name: `新场景 ${scenes.length + 1}`, expanded: true, shots: [{ id: `sh${id}`, name: '新镜头' }] }])
+    setSelectedShot(`sh${id}`)
+  }
+
+  const addShot = () => {
+    const activeScene = scenes.find(s => s.shots.some(sh => sh.id === selectedShot))
+    if (activeScene) {
+      setScenes(scenes.map(s => s.id === activeScene.id ? { ...s, shots: [...s.shots, { id: `sh${Date.now()}`, name: `镜头${s.shots.length + 1}.${s.shots.length + 1}` }] } : s))
+    }
+  }
+
+  const importMaterial = async () => {
+    const api = (window as any).electronAPI
+    if (!api) return
+    const files = await api.dialog.openFile({
+      title: '导入素材',
+      filters: [{ name:'媒体文件', extensions:['mp4','mov','avi','png','jpg','mp3','wav'] }]
+    })
+    if (files) console.log('imported:', files)
+  }
+
   return (
     <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
       <div style={{ width: '240px', borderRight: '1px solid var(--ho-border)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
@@ -70,8 +93,8 @@ export function OutlinePanel() {
           ))}
         </div>
         <div style={{ padding: '12px', borderTop: '1px solid var(--ho-border)', display: 'flex', gap: '8px' }}>
-          <Button variant="ghost"><Icon name="plus" size={12} /> 添加场景</Button>
-          <Button variant="ghost"><Icon name="plus" size={12} /> 添加镜头</Button>
+          <Button variant="ghost" onClick={addScene}><Icon name="plus" size={12} /> 添加场景</Button>
+          <Button variant="ghost" onClick={addShot}><Icon name="plus" size={12} /> 添加镜头</Button>
         </div>
       </div>
 
@@ -133,7 +156,7 @@ export function OutlinePanel() {
           ))}
         </div>
         <div style={{ padding: '12px', borderTop: '1px solid var(--ho-border)' }}>
-          <Button variant="default" style={{ width: '100%' }}><Icon name="plus" size={12} /> 导入素材</Button>
+          <Button variant="default" style={{ width: '100%' }} onClick={importMaterial}><Icon name="plus" size={12} /> 导入素材</Button>
         </div>
       </div>
     </div>
