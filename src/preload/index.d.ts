@@ -5,6 +5,9 @@ export interface SaveDialogOptions { title?: string; defaultPath?: string; filte
 export interface DITScanResult { success: boolean; files?: { name: string; path: string; size: number; mtime: number }[]; totalSize?: number; cardLabel?: string; error?: string }
 export interface DITHashResult { success: boolean; hash?: string; algorithm?: string; error?: string }
 export interface DITCopyResult { success: boolean; copiedBytes?: number; destHash?: string; algorithm?: string; error?: string }
+export interface DITResolveResult { success: boolean; resolvedPath?: string; match?: string; error?: string; fileName?: string }
+export interface DITMoveResult { success: boolean; newPath?: string; method?: string; error?: string }
+export interface DITProjectConfigResult { success: boolean; config?: unknown; error?: string }
 
 export interface ElectronAPI {
   app: {
@@ -27,6 +30,11 @@ export interface ElectronAPI {
     computeHash: (filePath: string, algorithm: string) => Promise<DITHashResult>
     copyFile: (srcPath: string, destPath: string, algorithm: string) => Promise<DITCopyResult>
     getCardLabel: (cardPath: string) => Promise<{ success: boolean; label?: string; error?: string }>
+    projectSaveConfig: (projectPath: string, configData: unknown) => Promise<{ success: boolean; error?: string }>
+    projectLoadConfig: (projectPath: string) => Promise<DITProjectConfigResult>
+    resolveFile: (originalPath: string, searchRoot: string, hash: string, algorithm: string) => Promise<DITResolveResult>
+    moveFile: (srcPath: string, destPath: string, updateAllReferences: boolean) => Promise<DITMoveResult>
+    scanProject: (projectPath: string) => Promise<DITScanResult>
   }
   fs: {
     readTextFile: (path: string) => Promise<string>

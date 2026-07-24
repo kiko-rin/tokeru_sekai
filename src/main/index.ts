@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron'
-import { join } from 'path'
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, statSync, copyFileSync } from 'fs'
+import { join, sep, relative } from 'path'
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, statSync, copyFileSync, renameSync, unlinkSync } from 'fs'
 import { createHash } from 'crypto'
 
 let mainWindow: BrowserWindow | null = null
@@ -170,6 +170,108 @@ function registerIpcHandlers(): void {
   })
 
   // === End DIT ===
+
+  // === DIT Project Config & File Management ===
+
+  ipcMain.handle('dit:project-save-config', async (_e, projectPath: string, configData: unknown) => {
+    try {
+      const configDir = join(projectPath, '.2dw')
+      if (!existsSync(configDir)) mkdirSync(configDir, { recursive: true })
+      writeFileSync(join(configDir, 'project.json'), JSON.stringify(configData, null, 2), 'utf-8')
+      return { success: true }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:project-load-config', async (_e, projectPath: string) => {
+    try {
+      const configPath = join(projectPath, '.2dw', 'project.json')
+      if (!existsSync(configPath)) return { success: true, config: null }
+      const content = readFileSync(configPath, 'utf-8')
+      return { success: true, config: JSON.parse(content) }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:resolve-file', async (_e, originalPath: string, searchRoot: string, hash: string, algorithm: string) => {
+    try {
+      // Step 1: Check if original path still exists
+      if (existsSync(originalPath)) {
+        // Verify hash
+        const actualHash = computeFileHash(originalPath, algorithm)
+        if (actualHash === hash) return { success: true, resolvedPath: originalPath, match: 'exact' }
+      }
+
+      // Step 2: Search by filename in searchRoot
+      const fileName = originalPath.split(/[/\\]/).pop() || ''
+      if (!fileName) return { success: false, error: 'Invalid path' }
+
+      const foundFiles: { path: string; score: number }[] = []
+
+      function walkSearch(dir: string, depth: number) {
+        if (depth > 5) return // limit depth to avoid excessive scanning
+        try {
+          const entries = readdirSync(dir, { withFileTypes: true })
+          for (const entry of entries) {
+            const fullPath = join(dir, entry.name)
+            if (entry.isDirectory() && !entry.name.startsWith('.')) {
+              walkSearch(fullPath, depth + 1)
+            } else if (entry.isFile() && entry.name === fileName) {
+              foundFiles.push({ path: fullPath, score: depth })
+            }
+          }
+        } catch {}
+      }
+      walkSearch(searchRoot, 0)
+
+      if (foundFiles.length > 0) {
+        // Pick the shallowest match and verify hash
+        foundFiles.sort((a, b) => a.score - b.score)
+        for (const f of foundFiles) {
+          const actualHash = computeFileHash(f.path, algorithm)
+          if (actualHash === hash) return { success: true, resolvedPath: f.path, match: 'hash' }
+        }
+        // No hash match, return the closest by name
+        return { success: true, resolvedPath: foundFiles[0].path, match: 'name-only' }
+      }
+
+      return { success: false, error: 'File not found', fileName }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  ipcMain.handle('dit:move-file', async (_e, srcPath: string, destPath: string, updateAllReferences: boolean) => {
+    try {
+      const destDir = destPath.substring(0, Math.max(destPath.lastIndexOf('/'), destPath.lastIndexOf('\\')))
+      if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true })
+      renameSync(srcPath, destPath)
+      return { success: true, newPath: destPath }
+    } catch (err: any) {
+      // Fall back to copy+delete if rename fails (cross-device)
+      try {
+        const buffer = readFileSync(srcPath)
+        writeFileSync(destPath, buffer)
+        unlinkSync(srcPath)
+        return { success: true, newPath: destPath, method: 'copy-delete' }
+      } catch (err2: any) {
+        return { success: false, error: err2.message }
+      }
+    }
+  })
+
+  ipcMain.handle('dit:scan-project', async (_e, projectPath: string) => {
+    try {
+      const { files, totalSize } = scanDirectory(projectPath)
+      return { success: true, files, totalSize }
+    } catch (err: any) {
+      return { success: false, error: err.message }
+    }
+  })
+
+  // === End DIT Project Config ===
 
   ipcMain.handle('fs:read-text-file', async (_e, path: string) => {
     return readFileSync(path, 'utf-8')

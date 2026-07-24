@@ -28,7 +28,17 @@ const electronAPI = {
     copyFile: (srcPath: string, destPath: string, algorithm: string): Promise<{ success: boolean; copiedBytes?: number; destHash?: string; algorithm?: string; error?: string }> =>
       ipcRenderer.invoke('dit:copy-file', srcPath, destPath, algorithm),
     getCardLabel: (cardPath: string): Promise<{ success: boolean; label?: string; error?: string }> =>
-      ipcRenderer.invoke('dit:get-card-label', cardPath)
+      ipcRenderer.invoke('dit:get-card-label', cardPath),
+    projectSaveConfig: (projectPath: string, configData: unknown): Promise<{ success: boolean; error?: string }> =>
+      ipcRenderer.invoke('dit:project-save-config', projectPath, configData),
+    projectLoadConfig: (projectPath: string): Promise<{ success: boolean; config?: unknown; error?: string }> =>
+      ipcRenderer.invoke('dit:project-load-config', projectPath),
+    resolveFile: (originalPath: string, searchRoot: string, hash: string, algorithm: string): Promise<{ success: boolean; resolvedPath?: string; match?: string; error?: string; fileName?: string }> =>
+      ipcRenderer.invoke('dit:resolve-file', originalPath, searchRoot, hash, algorithm),
+    moveFile: (srcPath: string, destPath: string, updateAllReferences: boolean): Promise<{ success: boolean; newPath?: string; method?: string; error?: string }> =>
+      ipcRenderer.invoke('dit:move-file', srcPath, destPath, updateAllReferences),
+    scanProject: (projectPath: string): Promise<{ success: boolean; files?: { name: string; path: string; size: number; mtime: number }[]; totalSize?: number; error?: string }> =>
+      ipcRenderer.invoke('dit:scan-project', projectPath)
   },
   fs: {
     readTextFile: (path: string): Promise<string> => ipcRenderer.invoke('fs:read-text-file', path),
