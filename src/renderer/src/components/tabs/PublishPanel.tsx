@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Button } from '../ui/Button'
 import { Panel } from '../ui/Panel'
 import { Input } from '../ui/Input'
+import { useTimelineStore } from '../../stores/timelineStore'
 import { Icon } from '../ui/Icon'
 
 const BUILTIN_PRESETS = [
@@ -38,6 +39,18 @@ export function PublishPanel() {
   const [selectedPreset, setSelectedPreset] = useState(-1)
   const [rendering, setRendering] = useState(false)
   const [progress, setProgress] = useState(0)
+  const { tracks } = useTimelineStore()
+
+  const projectDuration = useMemo(() => {
+    let maxEnd = 0
+    for (const t of tracks) for (const c of t.clips) {
+      const end = c.start + c.duration
+      if (end > maxEnd) maxEnd = end
+    }
+    return maxEnd || 30
+  }, [tracks])
+
+  const estimatedSize = Math.round(projectDuration * bitrate * 0.125) // MB
 
   const handleCodecChange = (c: string) => {
     setCodec(c)
@@ -102,7 +115,7 @@ export function PublishPanel() {
             </div>
           </div>
           <div style={{padding:'6px 16px',fontSize:'10px',color:'var(--ho-text-tertiary)',textAlign:'right'}}>
-            {rendering ? `渲染中... ${Math.round(progress)}%` : '时长: 00:45 - 预计大小: ~125 MB'}
+            {rendering ? `渲染中... ${Math.round(progress)}%` : `时长: ${String(Math.floor(projectDuration/60)).padStart(2,'0')}:${String(Math.floor(projectDuration%60)).padStart(2,'0')} - 预计大小: ~${Math.max(1, estimatedSize)} MB`}
           </div>
         </Panel>
 

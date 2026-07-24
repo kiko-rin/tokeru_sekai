@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Input } from '../ui/Input'
 import { Icon } from '../ui/Icon'
 import { useTimelineStore } from '../../stores/timelineStore'
@@ -6,7 +6,17 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts'
 
 const TC: Record<string,string> = { V1:'var(--ho-track-v1)', V2:'var(--ho-track-v2)', V3:'var(--ho-track-v3)', A1:'var(--ho-track-a1)', A2:'var(--ho-track-a2)' }
 const TK = ['V1','V2','V3','A1','A2']
-const TOTAL = 30
+
+function computeTotalDuration(tracks: { clips: { start: number; duration: number }[] }[]): number {
+  let maxEnd = 0
+  for (const t of tracks) {
+    for (const c of t.clips) {
+      const end = c.start + c.duration
+      if (end > maxEnd) maxEnd = end
+    }
+  }
+  return maxEnd || 30 // fallback 30s if no clips
+}
 
 export function EditorPanel() {
   const { currentTime, playing, selectedClipId, tracks, setCurrentTime, setPlaying, selectClip, setTracks, addClip, removeClip, addTrack, removeTrack } = useTimelineStore()
@@ -17,8 +27,12 @@ export function EditorPanel() {
   const [mediaSearch, setMediaSearch] = useState('')
   const [mediaFilter, setMediaFilter] = useState('全部')
   const [propsTab, setPropsTab] = useState<'metadata'|'properties'>('metadata')
+  const totalDuration = useMemo(() => computeTotalDuration(tracks), [tracks])
   const [inPoint, setInPoint] = useState(0)
-  const [outPoint, setOutPoint] = useState(TOTAL)
+  const [outPoint, setOutPoint] = useState(totalDuration)
+
+  // Keep outPoint in sync with totalDuration
+  useEffect(() => { setOutPoint(totalDuration) }, [totalDuration])
 
   useEffect(() => {
     if (tracks.length > 0) return
@@ -35,12 +49,19 @@ export function EditorPanel() {
     ])
   }, [tracks, setTracks])
 
+  // Playback: advance playhead until end of last clip, then stop
   useEffect(() => {
     if (!playing) return
     const id = setInterval(() => {
       const s = useTimelineStore.getState()
+      const total = computeTotalDuration(s.tracks)
       const next = s.currentTime + 1/30
-      s.setCurrentTime(next >= (s.outPoint||TOTAL) ? (s.inPoint||0) : Math.min(next, s.outPoint||TOTAL))
+      if (next >= total) {
+        s.setPlaying(false)
+        s.setCurrentTime(total)
+      } else {
+        s.setCurrentTime(next)
+      }
     }, 33)
     return () => clearInterval(id)
   }, [playing])
@@ -54,7 +75,7 @@ export function EditorPanel() {
     'ctrl-o': () => setOutPoint(useTimelineStore.getState().currentTime),
     'Space': () => setPlaying(!useTimelineStore.getState().playing),
     'arrowleft': () => useTimelineStore.getState().setCurrentTime(Math.max(0, useTimelineStore.getState().currentTime - 1/30)),
-    'arrowright': () => useTimelineStore.getState().setCurrentTime(Math.min(TOTAL, useTimelineStore.getState().currentTime + 1/30)),
+    'arrowright': () => useTimelineStore.getState().setCurrentTime(Math.min(totalDuration, useTimelineStore.getState().currentTime + 1/30)),
   })
 
   const ft = (s: number) =>
@@ -74,17 +95,17 @@ export function EditorPanel() {
     return () => clearInterval(id)
   }, [])
 
-  const seek = (d: number) => setCurrentTime(Math.max(0, Math.min(TOTAL, useTimelineStore.getState().currentTime + d)))
+  const seek = (d: number) => setCurrentTime(Math.max(0, Math.min(totalDuration, useTimelineStore.getState().currentTime + d)))
 
   const tlClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect()
-    setCurrentTime(Math.max(0, Math.min(TOTAL, ((e.clientX - r.left) / r.width) * TOTAL)))
-  }, [setCurrentTime])
+    setCurrentTime(Math.max(0, Math.min(totalDuration, ((e.clientX - r.left) / r.width) * totalDuration)))
+  }, [setCurrentTime, totalDuration])
 
   const clipsData = tracks.flatMap(t => t.clips.map(c => ({ track:t.name, name:c.name, start:c.start, dur:c.duration })))
   const selectedClip = clipsData.find(c => c.name === selectedClipId)
 
-  const px = (t: number) => `${(t/TOTAL)*100*zoom/60}%`
+  const px = (t: number) => `${(t/totalDuration)*100*zoom/60}%`
 
   return (
     <div style={{ flex:1, display:'grid', gridTemplateColumns:'299px 1fr', overflow:'hidden', backgroundColor:'var(--ho-bg-primary)' }}>
@@ -175,15 +196,15 @@ export function EditorPanel() {
           <span style={{ fontSize:11, cursor:'pointer', color:'var(--ho-text-tertiary)', padding:'3px 6px' }} onClick={()=>console.log('razor')}><Icon name="razor" size={14} /></span>
           <div style={{ flex:1 }} />
           {/* 跳到开始 */}
-          <Icon name="prev" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(-TOTAL)} />
+          <Icon name="prev" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(-totalDuration)} />
           <Icon name="prev-frame" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(-1/30)} />
           {/* 暂停or继续 x:420 */}
           <span style={{ fontSize:14, cursor:'pointer', color:'#fff', width:18, height:18, backgroundColor:'var(--ho-accent)', borderRadius:3, display:'inline-flex', alignItems:'center', justifyContent:'center' }} onClick={()=>setPlaying(!playing)}><Icon name={playing?'pause':'play'} size={12} color="#fff" /></span>
           <Icon name="next-frame" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(1/30)} />
-          <Icon name="next" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(TOTAL)} />
+          <Icon name="next" size={14} color="var(--ho-text-secondary)" style={{cursor:'pointer',padding:4}} onClick={()=>seek(totalDuration)} />
           {/* 旗标按钮组 x:515-571 */}
           <Icon name="flag" size={14} color="var(--ho-accent)" style={{cursor:'pointer',padding:4}} onClick={()=>setInPoint(currentTime)} />
-          <Icon name="close-small" size={14} color="var(--ho-text-tertiary)" style={{cursor:'pointer',padding:4}} onClick={()=>{ setInPoint(0); setOutPoint(TOTAL) }} />
+          <Icon name="close-small" size={14} color="var(--ho-text-tertiary)" style={{cursor:'pointer',padding:4}} onClick={()=>{ setInPoint(0); setOutPoint(totalDuration) }} />
           <Icon name="flag" size={14} color="var(--ho-accent)" style={{cursor:'pointer',padding:4}} onClick={()=>setOutPoint(currentTime)} />
           {/* 时间线缩放滑条 x:714, w:181 (spec) */}
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
@@ -215,13 +236,13 @@ export function EditorPanel() {
           <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
             {/* 时码刻度 32px */}
             <div style={{ height:32, flexShrink:0, borderBottom:'1px solid var(--ho-border)', position:'relative', backgroundColor:'var(--ho-bg-primary)' }}>
-              {Array.from({length:TOTAL+1}).map((_,s) => (
-                <div key={s} style={{ position:'absolute', left:`${(s/TOTAL)*100*zoom/60}%`, top:0, bottom:0, borderLeft:s%5===0?'1px solid rgba(255,255,255,0.15)':'1px solid var(--ho-border)' }}>
+              {Array.from({length:Math.ceil(totalDuration)+1}).map((_,s) => (
+                <div key={s} style={{ position:'absolute', left:`${(s/totalDuration)*100*zoom/60}%`, top:0, bottom:0, borderLeft:s%5===0?'1px solid rgba(255,255,255,0.15)':'1px solid var(--ho-border)' }}>
                   {s%5===0 && <span style={{ fontSize:9, color:'var(--ho-text-tertiary)', paddingLeft:3, whiteSpace:'nowrap' }}>{s}s</span>}
                 </div>
               ))}
-              <div style={{ position:'absolute', left:`${(inPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
-              <div style={{ position:'absolute', left:`${(outPoint/TOTAL)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
+              <div style={{ position:'absolute', left:`${(inPoint/totalDuration)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
+              <div style={{ position:'absolute', left:`${(outPoint/totalDuration)*100*zoom/60}%`, top:0, bottom:0, width:2, backgroundColor:'var(--ho-marker)', opacity:0.5 }} />
               <div style={{ position:'absolute', left:`${12*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
               <div style={{ position:'absolute', left:`${55*zoom/60}%`, top:6, borderTop:'6px solid var(--ho-marker)', borderLeft:'4px solid transparent', borderRight:'4px solid transparent', zIndex:11 }} />
             </div>
@@ -231,7 +252,7 @@ export function EditorPanel() {
               try {
                 const d = JSON.parse(e.dataTransfer.getData('text/plain'))
                 const r = e.currentTarget.getBoundingClientRect()
-                const dt = ((e.clientX-r.left)/r.width)*TOTAL
+                const dt = ((e.clientX-r.left)/r.width)*totalDuration
                 const row = Math.floor((e.clientY-r.top)/36)
                 const t = tracks[Math.min(row,tracks.length-1)]
                 if (d&&t) addClip(t.id,{ id:`c${Date.now()}`,name:d.n||d.name,filePath:'',duration:d.d||5,start:dt,trackId:t.id,width:1920,height:1080,fps:30,codec:'H264' as any,colorSpace:'Rec709' as any,colorDepth:8 as any,chromaSubsampling:'YUV420' as any })
